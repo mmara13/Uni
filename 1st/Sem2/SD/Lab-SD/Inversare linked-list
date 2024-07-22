@@ -1,0 +1,238 @@
+#include <bits/stdc++.h>
+using namespace std;
+  
+//clasa nod
+class Node {
+public:
+    int data;
+    Node* next;
+  
+    // constructor fara parametri
+    Node()
+    {
+        data = 0;
+        next = NULL;
+    }
+  
+    // constructor cu parametru
+    Node(int data)
+    {
+        this->data = data;
+        this->next = NULL;
+    }
+};
+  
+//clasa pt lista inlantuita
+class Linkedlist {
+    Node* head;
+  
+public:
+    // constructor fara parametri
+    Linkedlist() { head = NULL; }
+  
+    // functie de inserare
+    void insertNode(int);
+  
+    // functie de afisare
+    void printList();
+  
+    //functie de inserare la o pozitie data
+    void insertPos(Node** crt, int poz, int v);
+
+    // functie de stergere a unui nod la o pozitie data
+    void deleteNode(int);
+
+    auto getHead() const{ //getter pt radacina
+        return head;
+    }
+    
+    int getCount(Node* head); //pt lungime
+
+    void insertInOrder(int val); //inserare in ordine
+
+    void reverse(); //functie de inversare
+};
+
+//functie de inversare
+void Linkedlist::reverse(){
+    Node* crt = head;
+    Node* ant = NULL;
+    Node* next = NULL;
+    while (crt != NULL){
+        next = crt->next;
+        crt->next = ant;
+        ant = crt;
+        crt = next;
+    }
+    head = ant;
+}
+
+//functie de inserare in ordine
+void Linkedlist::insertInOrder(int val){
+    Node* newNode = new Node(val);
+
+    if (!head){ //inseamna ca inseram la radacina
+        head = newNode;
+        return;
+    }
+
+    if(val<head->data){ //daca valoarea e mai mica decat radacina, trb sa o inseram pe prima poz
+        newNode->next = head;
+        head = newNode;
+        return;
+    }
+
+    Node* crt = head;
+    while (crt->next && crt->next->data < val)
+        crt = crt->next;
+
+    newNode->next = crt->next;
+    crt->next = newNode;
+}
+Node* getNode(int data)
+{
+    //alocare memorie
+    Node* newNode = new Node();
+  
+    //adaugare data
+    newNode->data = data;
+    newNode->next=NULL;
+    return newNode;
+}
+
+//functie de inserare la o poz data
+void Linkedlist::insertPos(Node** crt, int poz, int data){
+    Node* newNode = new Node(data);
+    Node* temp = head;
+    int count = 1;
+    if (poz==1){
+        newNode->next = head;
+        head=newNode;
+        return;
+    }
+
+    while (temp != NULL && count < poz-1){
+        temp = temp->next;
+        count++;
+    }
+
+    if (temp==NULL){
+        cout<<"Nu exista pozitia"<<'\n';
+        return;
+    }
+
+    newNode->next = temp->next;
+    temp->next = newNode;
+}
+
+//dimensiune lista
+int Linkedlist::getCount(Node* head)
+{
+    int count = 0; 
+    Node* current = head;
+    while (current != NULL) {
+        count++;
+        current = current->next;
+    }
+    return count;
+}
+
+// functie de stergere a unui nod la o pozitie data
+void Linkedlist::deleteNode(int nodeOffset)
+{
+    Node *temp1 = head, *temp2 = NULL;
+    int ListLen = 0;
+  
+    if (head == NULL) {
+        cout << "Lista goala" << endl;
+        return;
+    }
+  
+    // lungimea listei inlantuite
+    while (temp1 != NULL) {
+        temp1 = temp1->next;
+        ListLen++;
+    }
+    //verifica daca pozitia de sters este mai mare decat lungimea listei
+    if (ListLen < nodeOffset) {
+        cout << "Index out of range"<< endl;
+        return;
+    }
+  
+    // declarare nod temporar
+    temp1 = head;
+  
+    //stergerea primului nod
+    if (nodeOffset == 1) {
+        head = head->next;
+        delete temp1;
+        return;
+    }
+  
+    //caut nodul care trebuie sters
+    while (nodeOffset-- > 1) {
+        temp2 = temp1;
+        temp1 = temp1->next;
+    }
+    //schimb next pointer-ul nodului anterior
+    temp2->next = temp1->next;
+  
+    //sterg nodul
+    delete temp1;
+}
+  
+//functie de inserare a unui nod
+void Linkedlist::insertNode(int data)
+{
+    //creez nod nou
+    Node* newNode = new Node(data);
+    
+    // il pun head
+    if (head == NULL) {
+        head = newNode;
+        return;
+    }
+  
+    //mergem la finalul listei
+    Node* temp = head;
+    while (temp->next != NULL) 
+        temp = temp->next;
+  
+    //inserez la finalul listei
+    temp->next = newNode;
+}
+  
+//functie de afisare a nodurilor din lista
+void Linkedlist::printList()
+{
+    Node* temp = head;
+  
+    //verific daca lista e goala
+    if (head == NULL) {
+        cout << "lista goala" << endl;
+        return;
+    }
+  
+    //parcurg toata lista
+    while (temp != NULL) {
+        cout << temp->data << " ";
+        temp = temp->next;
+    }
+}
+
+int main()
+{
+    // PROBLEMA 3 - am implementat functia reverse
+    Linkedlist list3;
+    list3.insertNode(1);
+    list3.insertNode(2);
+    list3.insertNode(3);
+    list3.insertNode(4);
+    cout<<"lista initiala este: ";
+    list3.printList(); cout<<'\n';
+    list3.reverse();
+    cout<<"lista inversata este: ";
+    list3.printList();
+
+}
+

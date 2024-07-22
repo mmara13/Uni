@@ -1,0 +1,103 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+class StivaChar{
+    int top;
+    char* v;
+    int capacity;
+
+public:
+    //constructor initializare stiva
+    StivaChar(int capacity){
+        this->capacity = capacity;
+        top = -1;
+        v = new char[capacity];
+    }
+
+    //destructor pt memoria folosita de stiva
+    ~StivaChar(){
+        delete[] v;
+    }
+
+    //functie push
+    void push(char c){
+        if(top == capacity - 1){
+            cout << "Overflow. Stiva este plina!" << endl;
+            return;
+        }
+        v[++top] = c;
+    }
+
+    //functie pop
+    char pop(){
+        if(top == -1){
+            cout << "Underflow. Stiva este goala!" << endl;
+            return -1;
+        }
+        return v[top--];
+    }
+
+    //functie peek
+    char peek(){
+        if(top == -1){
+            cout << "Stiva este goala!" << endl;
+            return -1;
+        }
+        return v[top];
+    }
+
+    bool isEmpty(){ //verificam daca stiva e goala
+        return top == -1;
+    }
+
+    //functie de afisare
+    void display(){
+        if(top == -1){
+            cout << "Stiva este goala!" << endl;
+            return;
+        }
+        cout<<"Stiva este:";
+        for(int i = top; i >= 0; i--){
+            cout << v[i] << " ";
+        }
+        cout << endl;
+    }
+
+    bool checkParanteze(string str){
+        StivaChar s1(str.length());
+        for (char c : str){
+            if(c=='('){
+                s1.push(c);
+            }
+            else if (c==')'){
+                if(s1.isEmpty() || s1.peek()!='('){
+                    return false;
+                }
+                s1.pop();
+            }
+        }
+        return s1.isEmpty();
+    }
+};
+
+int main(){
+
+//problema parantezarii
+    StivaChar s1(10);
+    string str = "((()))";
+    if(s1.checkParanteze(str)){
+        cout<<"\n"<<str<<": Parantezarea este corecta!"<<endl;
+    }
+    else{
+        cout<<"\n"<<str<<": Parantezarea nu este corecta!"<<endl;
+    }
+
+    string str1="()())()()";
+    if(s1.checkParanteze(str1)){
+        cout<<"\n"<<str1<<": Parantezarea este corecta!"<<endl;
+    }
+    else{
+        cout<<"\n"<<str1<<": Parantezarea nu este corecta!"<<endl;
+    }
+    return 0;
+}

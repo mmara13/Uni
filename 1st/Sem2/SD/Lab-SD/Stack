@@ -1,0 +1,87 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+class Stack{
+    int top;
+    int* v;
+    int capacity;
+
+public:
+    //constructor initializare stiva
+    Stack(int capacity){
+        this->capacity = capacity;
+        top = -1;
+        v = new int[capacity];
+    }
+
+    //destructor pt memoria folosita de stiva
+    ~Stack(){
+        delete[] v;
+    }
+
+
+    //functie de push
+    void push(int element){
+        if(top == capacity - 1){
+            cout << "Overflow. Stiva este plina!" << endl;
+            return;
+        }
+        v[++top] = element;
+    }
+
+    //functie de pop
+    int pop(){
+        if(top == -1){
+            cout << "Underflow. Stiva este goala!" << endl;
+            return -1;
+        }
+        return v[top--];
+    }
+
+    //functie de peek - returneaza din varf fara sa il elimine
+    int peek(){
+        if(top == -1){
+            cout << "Stiva este goala!" << endl;
+            return -1;
+        }
+        return v[top];
+    }
+
+    bool isEmpty(){ //verificam daca stiva e goala
+        return top == -1;
+    }
+
+    //functie de afisare
+    void display(){
+        if(top == -1){
+            cout << "Stiva este goala!" << endl;
+            return;
+        }
+        cout<<"Stiva este:";
+        for(int i = top; i >= 0; i--){
+            cout << v[i] << " ";
+        }
+        cout << endl;
+    }
+
+};
+int main(){
+    Stack s(5); //creem stiva de 5 elemente
+    s.push(13);
+    s.push(7);
+    s.push(4);
+    s.push(8);
+    s.push(12);
+
+    s.display();
+
+    cout<<"acum elementul din varf este: "<<s.peek()<<endl;
+
+    s.pop();
+    s.pop();
+
+    s.display();
+
+    cout<<"acum elementul din varf este: "<<s.peek()<<endl;
+    return 0;
+}

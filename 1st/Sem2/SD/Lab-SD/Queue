@@ -1,0 +1,90 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+class Queue{
+    int front, rear, size, capacity;
+    int* v;
+
+public:
+    Queue(int capacity){
+        this-> capacity= capacity;
+        v = new int[capacity];
+        size=0;
+        front=0;
+        rear=-1;
+    }
+
+    ~Queue(){
+        delete[] v;
+    }
+
+    void push(int el){
+        if(isFull()){
+            cout<<"Overflow. Coada este plina!"<<endl;
+            return;
+        }
+        rear = (rear+1)%capacity;
+        v[rear]=el;
+        size++;
+    }
+
+    int pop(){
+        if(isEmpty()){
+            cout<<"Underflow. Coada este goala!"<<endl;
+            return -1;
+        }
+        int el = v[front];
+        front = (front+1)%capacity;
+        size--;
+        return el;
+    }
+
+    int peek(){
+        if(isEmpty()){
+            cout<<"Coada este goala!"<<endl;
+            return -1;
+        }
+        return v[front];
+    }
+
+    bool isEmpty(){
+        return size==0;
+    }
+
+    bool isFull(){
+        return size==capacity;
+    }
+
+    void display(){
+        if(isEmpty()){
+            cout<<"Coada este goala!"<<endl;
+            return;
+        }
+        cout<<"Coada este: ";
+        for(int i=front; i<=rear; i++){
+            cout<<v[i]<<" ";
+        }
+        cout<<endl;
+    }
+};
+
+int main(){
+    //coada
+    Queue q(5);
+    q.push(13);
+    q.push(7);
+    q.push(4);
+    q.push(8);
+    q.push(12);
+
+    q.display();
+
+    cout<<"Primul element: "<<q.peek()<<endl;
+
+    q.pop();
+    q.pop();
+
+    q.display();
+
+    return 0;
+}

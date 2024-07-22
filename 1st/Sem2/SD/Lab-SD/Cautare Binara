@@ -1,0 +1,22 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int n,v[10000],i,j,m,x;
+int main()
+{
+    cin>>x; //nr cautat
+    cin>>n;
+    for(i=1;i<=n;i++)
+        cin>>v[i];
+    i=1,j=n;
+    while(j-i>=0){
+        m=(i+j)/2;
+        if(x==v[m]){
+            cout<<"x se afla pe pozitia "<<m-1;
+            break;}
+        else if(x>v[m])
+            j=m;
+            else if(x<v[m])
+                i=m;
+    }
+}

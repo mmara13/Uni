@@ -1,0 +1,57 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+class MinHeap{
+    int *v;
+    int m; //marime maxima min heap
+    int heap_m;
+public:
+    MinHeap(int m);
+
+    int parinte(int i){ return (i-1)/2; }
+
+    int getMin(){return v[0];}
+
+    void insert(int k);
+};
+
+MinHeap::MinHeap(int mm) //constructor heap
+{
+    heap_m=0;
+    m=mm;
+    v=new int[mm];
+}
+
+void swap(int *x, int *y){
+    int tmp=*x;
+    *x=*y;
+    *y=tmp;
+}
+
+void MinHeap::insert(int k){
+    if(heap_m == m){
+        cout<<"Nu se poate insera, a atins limita de memorie";
+        return;
+    }
+
+    heap_m++;
+    int i=heap_m-1;
+    v[i]=k;
+
+    while(i!=0 && v[parinte(i)]> v[i]){ //parcurgem heap ul sa rezolvam daca am inserat si am stricat principiul
+        swap(&v[i], &v[parinte(i)]);
+        i=parinte(i);
+    }
+}
+
+int main()
+{
+    MinHeap h(10);
+    h.insert(3);
+    h.insert(13);
+    h.insert(1);
+    h.insert(8);
+    h.insert(4);
+    h.insert(48);
+    cout<<h.getMin()<<" ";
+}

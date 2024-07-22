@@ -1,0 +1,201 @@
+#include <bits/stdc++.h>
+using namespace std;
+  
+//clasa nod
+class Node {
+public:
+    int data;
+    Node* next;
+  
+    // constructor fara parametri
+    Node()
+    {
+        data = 0;
+        next = NULL;
+    }
+  
+    // constructor cu parametru
+    Node(int data)
+    {
+        this->data = data;
+        this->next = NULL;
+    }
+};
+  
+//clasa pt lista inlantuita
+class Linkedlist {
+    Node* head;
+  
+public:
+    // constructor fara parametri
+    Linkedlist() { head = NULL; }
+  
+    // functie de inserare
+    void insertNode(int);
+  
+    // functie de afisare
+    void printList();
+  
+    //functie de inserare la o pozitie data
+    void insertPos(Node** crt, int poz, int v);
+
+    // functie de stergere a unui nod la o pozitie data
+    void deleteNode(int);
+
+    auto getHead() const{
+        return head;
+    }
+};
+
+Node* getNode(int data)
+{
+    //alocare memorie
+    Node* newNode = new Node();
+  
+    //adaugare data
+    newNode->data = data;
+    newNode->next=NULL;
+    //returnez nodul
+    return newNode;
+}
+//functie de inserare la o poz data
+void Linkedlist::insertPos(Node** crt, int poz, int data){
+    Node* newNode = new Node(data);
+    Node* temp = head;
+    int count = 1;
+    if (poz==1){
+        newNode->next = head;
+        head=newNode;
+        return;
+    }
+
+    while (temp != NULL && count < poz-1){
+        temp = temp->next;
+        count++;
+    }
+
+    if (temp==NULL){
+        cout<<"Nu exista pozitia"<<'\n';
+        return;
+    }
+
+    newNode->next = temp->next;
+    temp->next = newNode;
+}
+
+void Linkedlist::deleteNode(int nodeOffset)
+{
+    Node *temp1 = head, *temp2 = NULL;
+    int ListLen = 0;
+  
+    if (head == NULL) {
+        cout << "Lista goala" << endl;
+        return;
+    }
+  
+    // lungimea listei inlantuite
+    while (temp1 != NULL) {
+        temp1 = temp1->next;
+        ListLen++;
+    }
+    //verifica daca pozitia de sters este mai mare decat lungimea listei
+    if (ListLen < nodeOffset) {
+        cout << "Index out of range"<< endl;
+        return;
+    }
+  
+    // declarare nod temporar
+    temp1 = head;
+  
+    //stergerea primului nod
+    if (nodeOffset == 1) {
+  
+        //actualizare radacina
+        head = head->next;
+        delete temp1;
+        return;
+    }
+  
+    //caut nodul care trebuie sters
+    while (nodeOffset-- > 1) {
+  
+        temp2 = temp1;
+        temp1 = temp1->next;
+    }
+    //schimb next pointer-ul nodului anterior
+    temp2->next = temp1->next;
+  
+    //sterg nodul
+    delete temp1;
+}
+  
+//functie de inserare a unui nod
+void Linkedlist::insertNode(int data)
+{
+    //creez nod nou
+    Node* newNode = new Node(data);
+    
+    // il pun head
+    if (head == NULL) {
+        head = newNode;
+        return;
+    }
+  
+    //mergem la finalul listei
+    Node* temp = head;
+    while (temp->next != NULL) {
+  
+        //actualizez temp
+        temp = temp->next;
+    }
+  
+    //inserez la finalul listei
+    temp->next = newNode;
+}
+  
+//functie de afisare a nodurilor din lista
+void Linkedlist::printList()
+{
+    Node* temp = head;
+  
+    //verific daca lista e goala
+    if (head == NULL) {
+        cout << "Lista goala" << endl;
+        return;
+    }
+  
+    //parcurg toata lista
+    while (temp != NULL) {
+        cout << temp->data << " ";
+        temp = temp->next;
+    }
+}
+  
+int main()
+{
+    //PROBLEMA 1
+    int n;
+    Linkedlist lista1;
+    cin>>n;
+    for (int i=0;i<n;i++){ //citire lista de la tastatura si inserare 
+        int x;
+        cin>>x;
+        lista1.insertNode(x);}
+    lista1.printList();
+    cout<<endl;
+    auto h = lista1.getHead();
+    int index=1;
+    while(h!=NULL && h->next!=NULL){
+        int m=(h->data+h->next->data)/2;
+        lista1.insertPos(&h,index+1,m);
+        cout<<"s-a inserat pe pozitia "<<index<<" elementul "<<m<<"  lista e: ";
+        lista1.printList();
+        cout<<endl;
+        //sarim peste m-ul inserat cu h-ul, deci 2 pozitii
+        h=h->next->next;
+        index+=2; //daca h sare 2 pozitii, si indexul face la fel
+    }
+    cout<<"lista finala este: ";
+    lista1.printList();
+    
+}

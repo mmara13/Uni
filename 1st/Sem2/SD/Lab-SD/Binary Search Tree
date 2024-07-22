@@ -1,0 +1,163 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+struct Node{
+    int key;
+    Node *left, *right;
+};
+
+//functie creare nod nou
+Node* createNode(int key){
+    Node* newNode = new Node();
+    if(!newNode){
+        cout << "Error creating a new node" << endl;
+        return nullptr;
+    }
+    newNode->key = key;
+    newNode->left = newNode->right = nullptr;
+    return newNode;
+}
+
+//functie inserare nod
+Node* insertNode(Node* root, int key){
+    if(root == nullptr){
+        return createNode(key);
+    }
+    if(key<root->key){
+        root->left = insertNode(root->left, key);
+    }
+    else if(key>root->key){
+        root->right = insertNode(root->right, key);
+    }
+    return root;
+}
+
+int searchNode(Node* root, int key){
+    if(root==nullptr)
+        return -1; //nu exista in arbore
+    if(root->key==key)
+        return root->key; //am gasit
+    if(key<root->key)
+        return searchNode(root->left, key);
+    return searchNode(root->right, key);
+}
+
+//traversare (STG-RAD-DR) SRD
+void displaySRD(Node* root){
+    if(root == nullptr){
+        return;
+    }
+    displaySRD(root->left);
+    cout << root->key << " ";
+    displaySRD(root->right);
+}
+
+//traversare (RAD-STG-DR) RSD
+void displayRSD(Node* root){
+    if(root == nullptr){
+        return;
+    }
+    cout << root->key << " ";
+    displayRSD(root->left);
+    displayRSD(root->right);
+}
+
+//traversare (STG-DR-RAD) SDR
+void displaySDR(Node* root){
+    if(root == nullptr){
+        return;
+    }
+    displaySDR(root->left);
+    displaySDR(root->right);
+    cout << root->key << " ";
+}
+
+//functie max
+Node* findMax(Node* root){
+    if(root == nullptr){
+        return nullptr;
+    }
+    if(root->right == nullptr){
+        return root;
+    }
+    return findMax(root->right);
+}
+
+//functie delete nod
+Node* deleteNode(Node* root, int key){
+    if(root == nullptr)
+        return root;
+    if(key < root->key){
+        root->left = deleteNode(root->left, key);
+    }
+    else if(key > root->key){
+        root->right = deleteNode(root->right, key);
+    }
+    else{
+        //caz pt noduri cu un fiu sau niciunul
+        if(root->left == nullptr){
+            Node* temp = root->right;
+            delete root;
+            return temp;
+        }
+        else if(root->right == nullptr){
+            Node* temp = root->left;
+            delete root;
+            return temp;
+        }
+        
+        //nod cu doi copii
+        Node* temp = findMax(root->left);
+        root->key = temp->key;
+        root->left = deleteNode(root->left, temp->key);
+    }
+    return root;
+}
+
+int main(){
+    Node* root = nullptr;
+    root = insertNode(root, 8);
+    root = insertNode(root, 3);
+    root = insertNode(root, 1);
+    root = insertNode(root, 6);
+    root = insertNode(root, 7);
+    root = insertNode(root, 10);
+    root = insertNode(root, 14);
+
+    cout<<"SRD: ";
+    displaySRD(root);
+    cout<<endl;
+    cout<<"RSD: ";
+    displayRSD(root);
+    cout<<endl;
+    cout<<"SDR: ";
+    displaySDR(root);
+    cout<<endl;
+
+    cout<<"Cautare nod 10: ";
+    int key=10;
+    int temp = searchNode(root, key);
+    if(temp != -1){
+        cout << "Elementul " << key << " a fost gasit" << endl;
+    }
+    else{
+        cout << "Elementul " << key << " nu a fost gasit" << endl;
+    }
+
+    cout<<"Stergere nod 10: ";
+    root = deleteNode(root, 10);
+    //parcurgere dupa stergere
+    displaySRD(root);
+    cout<<endl;
+
+    //maxim
+    Node* maxNode=findMax(root);
+    if(maxNode != nullptr){
+        cout<<"Maximul este: "<<maxNode->key<<endl;
+    }
+    else{
+        cout<<"Arborele este gol"<<endl;
+    }
+
+    return 0;
+}

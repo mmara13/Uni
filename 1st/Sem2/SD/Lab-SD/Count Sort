@@ -1,0 +1,59 @@
+#include <bits/stdc++.h>
+using namespace std;
+ofstream fout("f.txt");
+
+void countSort(int v[], int n) {
+    int output[10000];
+    int count[10000];
+    int max = v[0];
+
+  for (int i = 1; i < n; i++) {
+    if (v[i] > max)
+      max = v[i];
+  }
+
+  for (int i = 0; i <= max; ++i) {
+    count[i] = 0;
+  }
+
+  for (int i = 0; i < n; i++) {
+    count[v[i]]++;
+  }
+
+  for (int i = 1; i <= max; i++) {
+    count[i] += count[i - 1];
+  }
+
+  for (int i = n - 1; i >= 0; i--) {
+    output[count[v[i]] - 1] = v[i];
+    count[v[i]]--;
+  }
+
+  for (int i = 0; i < n; i++) {
+    v[i] = output[i];
+  }
+}
+
+
+void afisare(int v[], int n) {
+  for (int i = 0; i < n; i++)
+    cout << v[i] << " ";
+  cout << endl;
+}
+
+int main() {
+    int v[10000];
+    int i;
+
+    for(i=1;i<=10000;i++)
+        fout<<rand()%10000<<" ";
+    fout<<endl;
+    ifstream fin("f.txt");
+
+    for(i=0; i<10000;i++)
+        fin>>v[i];
+
+    int n = sizeof(v) / sizeof(v[0]);
+    countSort(v, n);
+    afisare(v, n);
+}

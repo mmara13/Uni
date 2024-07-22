@@ -1,0 +1,76 @@
+#include <bits/stdc++.h>
+using namespace std;
+ofstream fout("f.txt");
+
+int partitie(int v[], int start, int sf)
+{
+ 
+    int pivot = v[start];
+ 
+    int cnt = 0;
+    for (int i = start + 1; i <= sf; i++) {
+        if (v[i] <= pivot)
+            cnt++;
+    }
+ 
+    // Giving pivot element its correct position
+    int pivotIndex = start + cnt;
+    swap(v[pivotIndex], v[start]);
+ 
+    // Sorting left and right parts of the pivot element
+    int i = start, j = sf;
+ 
+    while (i < pivotIndex && j > pivotIndex) {
+ 
+        while (v[i] <= pivot) {
+            i++;
+        }
+ 
+        while (v[j] > pivot) {
+            j--;
+        }
+ 
+        if (i < pivotIndex && j > pivotIndex) {
+            swap(v[i++], v[j--]);
+        }
+    }
+ 
+    return pivotIndex;
+}
+ 
+void quickSort(int v[], int start, int sf)
+{
+ 
+    if (start >= sf)
+        return;
+ 
+    //partitionarea
+    int p = partitie(v, start, sf);
+ 
+    //sortare stanga
+    quickSort(v, start, p - 1);
+    quickSort(v, p + 1, sf);//sortare dreapta
+}
+ 
+int main()
+{
+    int i;
+    int v[10000];
+    int n;
+    for(i=1;i<=10000;i++)
+        fout<<rand()%10000<<" ";
+    fout<<endl;
+    ifstream fin("f.txt");
+    //citire vect cu nr random
+    for(i=0; i<10000 ;i++)
+        fin>>v[i];
+
+    n=sizeof(v)/sizeof(v[0]);
+ 
+    quickSort(v, 0, n - 1);
+ 
+    for (int i = 0; i < n; i++) {
+        cout << v[i] << " ";
+    }
+    return 0;
+}

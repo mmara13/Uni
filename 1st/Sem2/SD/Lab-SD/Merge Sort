@@ -1,0 +1,83 @@
+#include <bits/stdc++.h>
+using namespace std;
+ofstream fout("f1.txt");
+ 
+void merge(int v[], int const st, int const m, int const dr)
+{ 
+    auto const v1 = m - st + 1;
+    auto const v2 = dr - m;
+ 
+    auto *vectst = new int[v1],
+         *vectdr = new int[v2];
+ 
+    for (auto i = 0; i < v1; i++)
+        vectst[i] = v[st + i];
+    for (auto j = 0; j < v2; j++)
+        vectdr[j] = v[m + 1 + j];
+ 
+    auto indexv1= 0, indexv2 = 0;
+    int indexmerged = st; 
+ 
+
+    while (indexv1 < v1 && indexv2 < v2) {
+        if (vectst[indexv1] <= vectdr[indexv2]) {
+            v[indexmerged]= vectst[indexv1];
+            indexv1++;
+        }
+        else {
+            v[indexmerged]= vectdr[indexv2];
+            indexv2++;
+        }
+        indexmerged++;
+    }
+
+    while (indexv1 < v1) {
+        v[indexmerged]= vectst[indexv1];
+        indexv1++;
+        indexmerged++;
+    }
+
+    while (indexv2 < v2) {
+        v[indexmerged]= vectdr[indexv2];
+        indexv2++;
+        indexmerged++;
+    }
+    delete[] vectst;
+    delete[] vectdr;
+}
+ 
+void mergeSort(int v[], int const begin, int const end)
+{
+    if (begin >= end)
+        return; 
+ 
+    auto mij = begin + (end - begin) / 2;
+    mergeSort(v, begin, mij);
+    mergeSort(v, mij + 1, end);
+    merge(v, begin, mij, end);
+}
+ 
+void afisare(int v[], int size)
+{
+    for (auto i = 0; i < size; i++)
+        cout << v[i] << " ";
+}
+ 
+int main()
+{
+    int i, v[10000];
+    for(i=1;i<=10000;i++)
+        fout<<rand()%10000<<" ";
+    fout<<endl;
+    ifstream fin("f1.txt");
+    for(i=0;i<10000;i++)
+        fin>>v[i];
+        
+    auto vsize = sizeof(v) / sizeof(v[0]);
+ 
+    mergeSort(v, 0, vsize - 1);
+ 
+    cout << "Vectorul sortat: \n";
+    afisare(v, vsize);
+    return 0;
+}
