@@ -1,0 +1,66 @@
+﻿#scheme clasice de probabilitate
+
+#1.Schema cu bila revenita - GENERALIZARE
+#a. pt doua culori
+
+n <- 10 #totalul de bile
+n1 <- 3 #numarul de bile de prima culoare
+n2 <- n-n1 #numarul de bile din a doua culoare
+p <- 0.5 #probabilitatea obtinerii culorii pe care o vrem
+
+combinari <- choose(n,n1)
+probabilitate <- combinari*p^n1*(1-p)^n2
+
+print(probabilitate)
+
+
+#b. pentru k culori
+n <- 13
+valori_n <- c(2,3,8) #numarul de elemente din fiecare culoare
+valori_p <- c(0.2, 0.3, 0.5)
+
+primul_termen <- factorial(n)/prod(factorial(valori_n))
+probabilitate <- primul_termen * prod(valori_p^valori_n)
+print(probabilitate)
+
+
+#Schema bilei nerevenite GENERALIZARE
+N <- 20 #numarul total de bile
+valori_N <- c(5,8,7) #numarul de bile pt fiecare culoare(N1, N2, N3)
+n <- 10 #numarul total de bile extrase
+valori_n <- c(2,3,5) #numarul de bile pt fiecare culoare extrasa (n1,n2,n3)
+
+numarator <- prod(choose(valori_N,valori_n))
+numitor <- choose(N,n)
+
+probabilitate_nerevenita <- numarator/numitor
+print(probabilitate_nerevenita)
+
+
+#Schema lui Pascal
+
+p <- 0.3 #probabilitatea succesului
+q <- 1-p #probabilitatea esecului
+k <- 5 #nr de extrageri necesare pt a obt succes
+probabilitate_pascal <- p*(q^(k-1))
+print(probabilitate_pascal)
+
+#Schema lui Poisson 
+
+#instalare pachet polynom pt creerea polinumului Q(t)
+install.packages("polynom")
+#incarcare pachet
+library(polynom)
+
+n <- 10 #numarul total de extrageri
+m <- 5 #numarul de succese (extrageri dorite)
+valori_p <- c(0.3,0.2,0.5) #probab pt fiecare urna
+valori_q <- 1 - valori_p
+
+#generare polinom Q(t)
+polinom <- polynomial(c(valori_q, valori_p))
+
+#coeficientul lui t^k
+coeficient_k <- coef(polinom)[m+1]
+
+print(coeficient_k)
