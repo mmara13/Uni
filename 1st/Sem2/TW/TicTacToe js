@@ -1,0 +1,205 @@
+class Gameboard {
+  constructor(/**args */) {
+    /** your code here */
+  }
+  printt() {
+    /** return ASCII representation of the board */
+  }
+
+  getOpponent(player) {
+    /** return the opponent of the given player */
+  }
+
+  [`computer-move`]() {
+    /** generate computer move */
+  }
+
+  win() {
+    /** check if someone won */
+  }
+
+  draw() {
+    /** check for a draw */
+  }
+
+  valid(position) {
+    /** check if the given position is valid */
+  }
+
+  takeTurn(player) {
+    /** code for user's move */
+  }
+
+  play() {
+    /** main game code:
+     * - at each step, a computer or user should make a move
+     * - after a move has been made, we should check if someone won or it's a tie
+     * - for the next step, the current player's opponent should be taking the turn
+     */
+  }
+}
+
+
+function main() {
+  let name = prompt("Hai sa jucam X si 0. Cum te cheama?");
+  let splayer = prompt("Buna " + name + ". Cu ce vrei sa joci? X sau 0? X incepe primul.").toUpperCase();
+  let tablaJoc = Array(9).fill("?"); //initializam tabla de joc cu 9 elemente
+  
+  let currentplayer;
+  let pos;
+  let scomputer;
+  if(splayer==="X"){
+    currentplayer=splayer;
+    scomputer=`0`;
+  }
+  else{
+    currentplayer='X';
+    scomputer=`X`;
+  }
+
+  printtt(tablaJoc); //afisam tabla la inceput
+  while(!win() || !draw() || !lost()){ //verificam sa nu se fi terminat jocul
+    let row1 = tablaJoc[0] + " | " + tablaJoc[1] + " | " + tablaJoc[2]; //fac asta ca sa pot afisa si in prompt
+    let row2 = tablaJoc[3] + " | " + tablaJoc[4] + " | " + tablaJoc[5];
+    let row3 = tablaJoc[6] + " | " + tablaJoc[7] + " | " + tablaJoc[8];
+    let tableString = row1 + "\n" + row2 + "\n" + row3;
+
+    if(currentplayer===splayer){ //daca primul player e chiar playerul
+      pos= parseInt(prompt(tableString + "\n" + "Unde vrei sa pui urmatorul semn?")); //citim pozitia
+      if(valid(pos, currentplayer)){
+        tablaJoc[pos-1]=splayer;
+        if(win()){
+          alert("Bravo, " + name + ", ai castigat!");
+          break;
+        }
+        else if(draw()){
+          alert("Remiza!");
+          break;
+        }
+        else{
+          alert("Jocul poate continua");
+        }
+        currentplayer=scomputer; //alternam cu computerul
+      }
+      else{
+        console.log("Mutare invalida");
+      }
+    }
+    else{
+      currentplayer=splayer;
+      computerMove(tablaJoc);
+    }
+    printtt(tablaJoc);
+
+    function valid(pos, currentplayer){
+      let s;
+      if(currentplayer===splayer){
+        s=scomputer;
+      }
+      else{
+        s=splayer;
+      }
+      //functie care sa verifice daca o mutare este valida
+      if (tablaJoc[pos-1]==="?" || tablaJoc[pos-1]!=s){
+        return true;
+      }
+      else{
+        return false;
+      }
+    }
+  }
+  
+  function printtt(){
+    //functie care sa afiseze o reprezentare ASCII a tablei de joc
+    let output = "";
+    for (let i = 0; i < tablaJoc.length; i++) {
+      let celula = (tablaJoc[i] === "?") ? (i + 1) : tablaJoc[i];
+      output += " | " + celula;
+      if ((i + 1) % 3 === 0) {
+        output += " |\n";
+      }
+    }
+    console.log(output);
+  }
+  
+  function win(){
+    //functie care sa verifice daca cineva a castigat
+    if (tablaJoc[0] === tablaJoc[1] && tablaJoc[1] === tablaJoc[2] && tablaJoc[0] !== "?") {
+      alert("Simbolul " + tablaJoc[0] + " a castigat!");
+      return true;
+    }
+    if (tablaJoc[3] === tablaJoc[4] && tablaJoc[4] === tablaJoc[5] && tablaJoc[3] !== "?") {
+      alert("Simbolul " + tablaJoc[3] + " a castigat!");
+      return true;
+    }
+    if (tablaJoc[6] === tablaJoc[7] && tablaJoc[7] === tablaJoc[8] && tablaJoc[6] !== "?") {
+      alert("Simbolul " + tablaJoc[6] + " a castigat!");
+      return true;
+    }
+    if (tablaJoc[0] === tablaJoc[3] && tablaJoc[3] === tablaJoc[6] && tablaJoc[0] !== "?") {
+      alert("Simbolul " + tablaJoc[0] + " a castigat!");
+      return true;
+    }
+    if (tablaJoc[1] === tablaJoc[4] && tablaJoc[4] === tablaJoc[7] && tablaJoc[1] !== "?") {
+      alert("Simbolul " + tablaJoc[1] + " a castigat!")
+      return true;
+    }
+    if (tablaJoc[2] === tablaJoc[5] && tablaJoc[5] === tablaJoc[8] && tablaJoc[2] !== "?") {
+      alert("Simbolul " + tablaJoc[2] + " a castigat!")
+      return true;
+    }
+    if (tablaJoc[0] === tablaJoc[4] && tablaJoc[4] === tablaJoc[8] && tablaJoc[0] !== "?") {
+      alert("Simbolul " + tablaJoc[0] + " a castigat!")
+      return true;
+    }
+    if (tablaJoc[2] === tablaJoc[4] && tablaJoc[4] === tablaJoc[6] && tablaJoc[2] !== "?") {
+      alert("Simbolul " + tablaJoc[2] + " a castigat!")
+      return true;
+    }
+    return false;
+  }
+
+  function draw(){
+    //functie care sa verifice daca este remiza
+    if (tablaJoc[0] !== "?" && tablaJoc[1] !== "?" && tablaJoc[2] !== "?" && tablaJoc[3] !== "?" && tablaJoc[4] !== "?" && tablaJoc[5] !== "?" && tablaJoc[6] !== "?" && tablaJoc[7] !== "?" && tablaJoc[8] !== "?") {
+      return true;
+    }
+    return false;
+  }
+
+  function lost(){
+    if (win() || draw()){
+      return false; //nu se poate pierde daca e castigat
+    }
+
+
+    for(let i=0; i<tablaJoc.length; i++){
+      if(tablaJoc[i]==="?"){
+        return false; //nu se poate pierde daca mai sunt mutari valide
+      }
+    }
+
+    alert("Ai pierdut :(");
+    return true;
+  }
+
+  
+  function computerMove(tablaJoc){
+    pos = Math.floor(Math.random() * tablaJoc.length) + 1;
+    while(!valid(pos)){
+      pos = Math.floor(Math.random() * tablaJoc.length) + 1;
+    }
+    tablaJoc[pos-1]=scomputer;
+    if(win()){
+      alert("Ai pierdut :(");
+    }
+    else if(draw()){
+      alert("Remiza!");
+    }
+    else if(lost()){
+      alert("Bravo, " + name + ", ai castigat!");
+    }
+  }
+}
+
+main();
