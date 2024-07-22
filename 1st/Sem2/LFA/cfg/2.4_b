@@ -1,0 +1,2 @@
+S -> 0 R 0 | 1 R 1 | epsilon
+R -> 0 R | 1 R | epsilon

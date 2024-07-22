@@ -1,0 +1,227 @@
+#functia care citeste din fisier si memoreaza datele intr-un dictionar
+def load_file(file_name):
+  file=file_name
+  f=open(file, "r") #deschidere pt read
+  d={} #initializare dictionar vid
+  ok=0
+  start=[]
+  final_states=[]
+  for line in f:
+      line=line.strip() #scoatem \n
+      if line[0]!="#": #ignoram comentariile
+             if line not in d and ok==0:
+                  d[line]=[]
+                  value=line
+                  ok+=1
+             else:
+                   if line == "End": #ajungem la capat de sectiune
+                         ok=0 #reluam cu ok=0 pt urm sectiune
+                   else:
+                         if len(line.split(','))==3:
+                              s1, s2, s3 = line.split(',')
+                              if s2=='S':
+                                 d[value].append(s1)
+                                 start.append(s1)
+                                 final_states.append(s1)
+                              else:
+                                 s=[s1,s3,s2]
+                                 d[value].append(s)
+                         elif len(line.split(','))==2:
+                                 state,s=line.split(',')
+                                 if s== 'S':
+                                     start.append(state)
+                                 elif s== 'F':
+                                     final_states.append(state)
+                                 d[value].append(state)
+                         else:
+                                 d[value].append(line)
+  f.close() #inchidere fisier
+  return (d,start,final_states)
+
+res=load_file("nfa.in")  #dictionarul format din elementele fisierului parsat
+d=res[0]
+start=res[1]
+final_states=res[2]
+print(d)
+print(start)
+print(final_states)
+
+def verify_letters(d):
+   if 'Sigma:' not in d or d['Sigma:']==[]: #verif daca exista letters
+       return False
+   else:
+        return True
+
+def verify_states(d):
+   if 'States:' not in d or d['States:']==[]: #verif daca avem states
+       return False
+   else:
+       return True
+
+#functie de verificare ca avem o singura stare initiala, o singura sau mai multe stari finale sau nu avem deloc stari finale/initiale
+def verify_SF(start,final_states):
+  valid=True
+  if len(start)>1:
+      valid=False
+  if len(final_states)==0 and len(start)>0:
+      valid=False
+  if len(final_states)>0 and len(start)==0:
+      valid=False
+  return valid
+
+def verify_file(d):
+  valid=True
+  for value in d['Transitions:']:
+      state1=value[0]
+      state2=value[1]
+      sigma=value[2] #s1=prima stare, l=litera, s2=a doua stare
+      if state1 not in d['States:'] or state2 not in d['States:'] or sigma not in d['Sigma:']:    #verificam dc s1,s2 exista in states si l in sigma
+           valid=False
+  return valid
+
+verify1=verify_letters(d)
+verify2=verify_states(d)
+verify3=verify_SF(start,final_states)
+verify4=verify_file(d)
+
+
+if verify1==True and verify2==True and verify3==True and verify4==True:
+   print ("Fisierul este in regula")
+else:
+   print ("Fisierul nu este bun")
+
+
+def dfa (string,start, d, final_states, path): #functia recursiva care verifica daca cuvantul este valid
+ if len(string) == 0:
+     for s in start:
+         if s in final_states:
+             return "accept"
+         else:
+             return "reject"
+ elif(len(string) != 0):
+     for k in range(0, len(d['Transitions:'])):
+         if string[0] == d['Transitions:'][k][2] and start==[d['Transitions:'][k][0]]: #verificam daca avem in ce stare sa ne ducem
+                   path.append(d['Transitions:'][k])
+                   start=[d['Transitions:'][k][1]]
+                   return dfa(string[1:], start, d, final_states, path)  #apelam functia pentru stringul ramas
+ return "reject"
+
+
+f=open("input_string","r")
+strings=[]
+path=[]
+display=[]
+for line in f.readlines():
+    strings.append(line)
+for string in strings:
+    display.append(dfa(string,start,d,final_states,path))
+print(*display)
+
+
+#facem nfa table corespunzator
+l=["S/Trans"] #asta o sa fie capul de tabel, coltul din stanga ca sa ne dam seama ca pe prima linie va fi alfabetu si pe prima coloana vor fi starile
+for s in d["Sigma:"]:
+    l.append(s)
+
+rows=len(d["States:"])+1 #ca sa avem si primul rand care indica starea/tranzitia si sigma
+cols=len(d["Sigma:"])+1 #ca sa avem si prima coloana care indica starea din care plecam
+nfa_table=[[0 for j in range(cols)] for i in range(rows)] #initializam nfa table cu nr de states+1 linii si nr de sigma + 1 coloane
+nfa_table[0]=l
+
+i=1
+for s in d["States:"]:
+    nfa_table[i][0]=s #fac asta ca pe prima coloana din tabel sa fie insirate starile
+    i+=1
+
+def reachable_from_with(state, d, sigma):
+    l=[]
+    #facem list vida pentru a adauga in ea starile in care putem ajunge din starea data ca parametru prin sigma precizata
+    for t in d["Transitions:"]:
+        if state==t[0] and sigma==t[2]:
+            l.append(t[1])
+            #daca starea respectiva e una de plecare din transitions, dam append la starea in care ajungem
+            #asa creem lista cu toate starile in care putem ajunge din state
+    l.sort(key=lambda x: int(x[1:])) #sortam dupa numarul de dupa 'q' ca sa nu existe doua stari compuse la fel (['q1','q2']==['q2','q1'])
+    print("starea",state, "ajunge prin", sigma, "in:", l)
+    return l
+
+rezultat=[]
+def rezultat_nfa():
+    for state in d["States:"]:
+        for sigma in d["Sigma:"]: #luam pe rand fiecare sigma din alfabet si apelam pentru ea si pt fiecare
+        #  stare, pe rand, reachable_from_with care face lista cu starile
+            l=reachable_from_with(state,d,sigma) #in care putem ajunge din starea state prin sigma
+            print(l, "aici")
+            rezultat.append(l)
+rezultat_nfa() #apelam functia ca sa faca tabelul dar momentan doar sub forma de lista
+print("REZULTAT: ", rezultat)
+
+def make_print_nfa_table():
+    i=0
+    for index_linie in range(1,rows):
+        for index_col in range(1,cols):
+            nfa_table[index_linie][index_col]=rezultat[i]
+            i+=1
+
+    print("NFA table:")
+    print(nfa_table[0]) #pt tabel efectiv sub forma de tabel cu informatiile despre el pe prima linie
+    for index_linie in range(1,rows):
+        print(nfa_table[index_linie][0],":",nfa_table[index_linie][1:])
+make_print_nfa_table()
+
+dfa_dict={}
+dfa_dict['Sigma:']=d['Sigma:']
+dfa_dict['States:']=d['States:'] #initial are aceleasi stari, vom adauga cele compuse dupa
+def update_dfa_states(): #verificam ce stari nu sunt in dfa_dict, adica cele compuse, si le adaugam
+
+    for index_linie in range(1,rows):
+        for index_col in range(1,cols):
+            stare=nfa_table[index_linie][index_col]
+            if (len(stare)>1 and stare not in dfa_dict['States:']) or (len(stare)==1 and stare[0] not in dfa_dict["States:"]): #ca sa pastrez sub forma de lista, daca starea are lg >1 ins ca e compusa si o adaug ca lista, altfel doar adaug elementul, adica si unicul
+                dfa_dict['States:'].append(stare)
+                #pana aici doar am adaugat starile compuse in dfa
+
+
+update_dfa_states()
+
+dfa_dict["Transitions:"]=[] #initializam tranzitiile cu lista vida pentru ca urmeaza sa le facem
+def copy_dfa_simple_transitions():
+    lista=[]
+    k=0
+    j=0 #j reprezinta indicele starii pe care o punem in transitions
+    g=0 #g reprezinta indicele literei din sigma care reprezinta tranzitia respectiva
+    for i in range(len(rezultat)):
+        if k==len(d['Sigma:']): #adica daca am umplut deja randul pentru o stare simpla, trecem la urm
+            j+=1 #aici se face trecerea propriu-zisa la randul urmator, adica trecem la urmatoarea stare din tabel
+            g=0
+            k=0
+        r="".join(rezultat[i]) #am dat join ca sa nu mai fie lista la starile compuse adica din ['q1','q2'] am facut 'q1q2'
+        lista = [d['States:'][j], r, d['Sigma:'][g]]
+        dfa_dict['Transitions:'].append(lista)
+        g+=1
+        k+=1
+copy_dfa_simple_transitions()
+
+def make_dfa_transitions():
+    for state in dfa_dict['States:']: #luam pe rand starile din dfa
+        if type(state)==list: #adica starea e compusa, pt ca doar cele compuse sunt liste, restul sunt stringuri
+            for sigma in dfa_dict['Sigma:']:
+                rez=set() #initializam cu setul vid (facem set ca sa nu avem valori duplicat, de exemplu q1 poate merge in q1q2 prin 0
+                #si q2 prin 0 tot in q2, in cazul asta starea q1q2q2 e de fapt starea q1q2)
+                for s in state:
+                    lista_stari=reachable_from_with(s,d,sigma) #vedem din nou in ce stare ajungem din fiecare bucata din starea compusa
+                    for stare in lista_stari:
+                        rez.add(stare)
+                rez=list(rez) #o transformam inapoi in lista pentru ca nu avem dc sa punem multime in dictionarul nostru
+                rez.sort(key=lambda x: int(x[1:])) #pt ca setul ne amesteca valorile, am ordonat din nou dupa cifra de dupa 'q'
+                rez="".join(rez)
+                m=state #am facut copie la state ul compus ca sa il lasam lista pt verificarile viitoare
+                m="".join(m) #am dat join la copie ca sa apara starea compusa ca string si nu ca lista
+                listarez=[]
+                listarez=[m,rez,sigma] #am pus starea, unde merge, si prin ce tranzitie in lista
+                dfa_dict["Transitions:"].append(listarez) #am dat append listei la dfa[transitions]
+
+make_dfa_transitions()
+print(dfa_dict['Transitions:'])
+
+print("DFA-ul echivalent este: ",dfa_dict)
