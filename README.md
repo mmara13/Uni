@@ -1,4 +1,4 @@
-# [FMI Materials](https://github.com/FMI-Materials/FMI-Materials)
+
 
 ### [Year I](https://github.com/FMI-Materials/FMI-Materials/tree/main/Year%20I)
 | Semester | Discipline                                       | C | S | L | P | FE | Credits |
@@ -37,3 +37,5 @@
 | II       | [Retele De Calculatoare (RC)](https://github.com/FMI-Materials/FMI-Materials/tree/main/Year%20II/Semester%20II/Retele%20De%20Calculatoare)                       | 2 | - | 2 | - | E  | 4       |
 | II       | [Programare Avansata Pe Obiecte (PAO)](https://github.com/FMI-Materials/FMI-Materials/tree/main/Year%20II/Semester%20II/Programare%20Avansata%20Pe%20Obiecte)                   | 2 | - | 1 | 1 | V  | 4       |
 | II       | Competente Avansate Intr-o Limba Straina II (Engleza)      | - | 1 | - | - | V  | 2       |
+
+-> # [FMI Materials](https://github.com/FMI-Materials/FMI-Materials)
