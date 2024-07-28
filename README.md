@@ -4,7 +4,8 @@
 | Semester | Discipline                                       | C | S | L | P | FE | Credits |
 |----------|--------------------------------------------------|---|---|---|---|----|---------|
 | I        | [Structuri Algebrice In Informatica (SAI)](https://github.com/FMI-Materials/FMI-Materials/tree/main/Year%20I/Semester%20I/Structuri%20Algebrice%20In%20Informatica)               | 2 | 2 | - | - | E  | 4       |
-| I        | [Calcul Diferential Si Integral (CDI)](https://github.com/FMI-Materials/FMI-Materials/tree/main/Year%20I/Semester%20I/Calcul%20Diferential%20Si%20Integral)                   | 3 | 2 | - | - | E  | 6       |
+| I        | [Calcul Diferential Si Integral (CDI)](https://github.com/FMI-Materials/FMI-Materials/tree/main/Year%20I/Semester%20I/Calcul%20Diferential%20Si%20Integral) 
+| I        | [Vezi FMI Materials] (https://github.com/FMI-Materials/FMI-Materials/tree/main/Year%20I/Semester%20I/Calcul%20Diferential%20Si%20Integral) | 3 | 2 | - | - | E  | 6       |
 | I        | [Logica Matematica Si Computationala (LMC)](https://github.com/FMI-Materials/FMI-Materials/tree/main/Year%20I/Semester%20I/Logica%20Matematica%20Si%20Computationala)              | 2 | 2 | - | - | E  | 5       |
 | I        | [Programarea Algoritmilor (PA)](https://github.com/FMI-Materials/FMI-Materials/tree/main/Year%20I/Semester%20I/Programarea%20Algorimilor)                         | 2 | 1 | 1 | - | E  | 5       |
 | I        | [Arhitectura Sistemelor De Calcul (ASC)](https://github.com/FMI-Materials/FMI-Materials/tree/main/Year%20I/Semester%20I/Arhitectura%20Sistemelor%20De%20Calcul)                 | 2 | 1 | 1 | - | V  | 4       |
