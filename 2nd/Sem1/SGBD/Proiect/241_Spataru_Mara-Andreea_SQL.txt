@@ -1,0 +1,2591 @@
+--EXERCITIUL 4
+–tabel ARTIST
+
+CREATE TABLE ARTIST(
+artist_id INT PRIMARY KEY,
+nume VARCHAR(100),
+varsta INT,
+descriere VARCHAR(255)
+);
+
+
+–tabel ALBUM
+
+
+CREATE TABLE ALBUM (
+album_id INT PRIMARY KEY,
+gen VARCHAR(50) NOT NULL,
+pret DECIMAL(10,2) CHECK (pret>0),
+titlu VARCHAR(100) NOT NULL,
+data_lansare DATE NOT NULL,
+artist_id INT NOT NULL,
+CONSTRAINT album_artist_fk FOREIGN KEY (artist_id) REFERENCES ARTIST
+(artist_id) --dam nume pt fk ca sa putem identifica erori
+);
+
+
+
+
+--tabel MELODIE
+
+CREATE TABLE MELODIE(
+melodie_id INT PRIMARY KEY,
+titlu VARCHAR(255) NOT NULL,
+descriere VARCHAR(255),
+durata NUMBER(3,0) NOT NULL,
+data_lansare DATE NOT NULL,
+album_id INT NOT NULL,
+artist_id INT,
+CONSTRAINT song_artist_fk FOREIGN KEY (artist_id) REFERENCES
+ARTIST(artist_id),
+CONSTRAINT song_album_fk FOREIGN KEY (album_id) REFERENCES
+ALBUM(album_id)
+);
+
+
+--tabel PLAYLIST
+
+CREATE TABLE PLAYLIST (
+playlist_id INT PRIMARY KEY,
+titlu VARCHAR(255) NOT NULL,
+data_creare DATE NOT NULL
+);
+
+
+--tabel UTILIZATOR
+
+CREATE TABLE UTILIZATOR(
+utilizator_id INT PRIMARY KEY,
+nume_utilizator VARCHAR(50) UNIQUE,
+parola VARCHAR(128) NOT NULL,
+email VARCHAR(150),
+data_nastere DATE NOT NULL,
+tara VARCHAR(2) NOT NULL
+);
+
+
+--tabel EPISOD
+
+CREATE TABLE EPISOD(
+episod_id INT PRIMARY KEY,
+podcast_id INT,
+titlu VARCHAR(120) NOT NULL,
+FOREIGN KEY (podcast_id) REFERENCES PODCAST(podcast_id)
+);
+
+
+--table PODCAST
+
+CREATE TABLE PODCAST (
+podcast_id INT PRIMARY KEY,
+nume VARCHAR(255) NOT NULL,
+nr_episoade INT CHECK (nr_episoade >0),
+nume_autor VARCHAR(100) NOT NULL
+);
+
+
+--tabel ARTIST_CANTA_MELODIE
+
+CREATE TABLE ARTIST_CANTA_MELODIE (
+artist_id INT,
+melodie_id INT,
+PRIMARY KEY(artist_id, melodie_id),
+25
+FOREIGN KEY (artist_id) REFERENCES ARTIST (artist_id),
+FOREIGN KEY (melodie_id) REFERENCES MELODIE(melodie_id)
+);
+
+
+--tabel UTILIZATOR_apreciaza_ALBUM
+
+CREATE TABLE UTILIZATOR_APRECIAZA_ALBUM(
+utilizator_id INT,
+album_id INT,
+PRIMARY KEY(utilizator_id, album_id),
+FOREIGN KEY(utilizator_id) REFERENCES UTILIZATOR(utilizator_id),
+FOREIGN KEY(album_id) REFERENCES ALBUM (album_id)
+);
+
+
+--tabel UTILIZATOR_URMARESTE_ARTIST
+
+CREATE TABLE UTILIZATOR_URMARESTE_ARTIST(
+utilizator_id INT,
+artist_id INT,
+PRIMARY KEY (utilizator_id, artist_id),
+FOREIGN KEY(utilizator_id) REFERENCES UTILIZATOR(utilizator_id),
+FOREIGN KEY(artist_id) REFERENCES ARTIST(artist_id)
+);
+
+
+--TABEL MELODIE_IN_PLAYLIST_UTILIZATOR
+
+CREATE TABLE MELODIE_IN_PLAYLIST_UTILIZATOR(
+melodie_id INT,
+playlist_id INT,
+utilizator_id INT,
+data_adaugare DATE NOT NULL, --data adaugarii melodiei in playlist-ul userului
+PRIMARY KEY (melodie_id, playlist_id, utilizator_id),
+FOREIGN KEY(melodie_id) REFERENCES MELODIE(melodie_id),
+FOREIGN KEY (playlist_id) REFERENCES PLAYLIST(playlist_id),
+FOREIGN KEY (utilizator_id) REFERENCES UTILIZATOR(utilizator_id)
+);
+
+
+--tabel UTILIZATOR_APRECIAZA_PLAYLIST
+
+CREATE TABLE UTILIZATOR_APRECIAZA_PLAYLIST(
+utilizator_id INT,
+playlist_id INT,
+PRIMARY KEY (utilizator_id, playlist_id),
+FOREIGN KEY (utilizator_id) REFERENCES UTILIZATOR(utilizator_id),
+26
+FOREIGN KEY(playlist_id) REFERENCES PLAYLIST(playlist_id)
+);
+
+
+--tabel ISTORIC_MELODII
+
+CREATE TABLE ISTORIC_MELODII(
+istoric_melodii_id INT PRIMARY KEY,
+utilizator_id INT,
+melodie_id INT,
+data_ascultare DATE NOT NULL,
+FOREIGN KEY (utilizator_id) REFERENCES UTILIZATOR(utilizator_id),
+FOREIGN KEY(melodie_id) REFERENCES MELODIE(melodie_id)
+);
+
+
+--tabel PODCAST_ISTORIC
+
+CREATE TABLE PODCAST_ISTORIC(
+podcast_istoric_id INT PRIMARY KEY,
+utilizator_id INT,
+episod_id INT,
+data_ascultare DATE NOT NULL,
+FOREIGN KEY (utilizator_id) REFERENCES UTILIZATOR(utilizator_id),
+FOREIGN KEY (episod_id) REFERENCES EPISOD(episod_id)
+);
+
+
+
+--EXERCITIUL 5
+
+–tabelul ARTIST:
+	
+INSERT INTO ARTIST (artist_id, nume, varsta, descriere)
+VALUES (1,'Alicia Keys’, 42, 'American singer, songwriter, and pianist');
+INSERT INTO ARTIST (artist_id, nume, varsta, descriere)
+VALUES (2,'Ne-Yo', 43, 'American singer, songwriter, actor, dancer, and record producer.');
+insert into artist(artist_id, nume, varsta, descriere)
+values(3, 'Adele', 35, 'English singer-songwriter');
+INSERT INTO ARTIST(artist_id, nume, varsta, descriere)
+VALUES(4, 'The Weeknd', 33, 'Canadian singer and songwriter');
+INSERT INTO ARTIST(artist_id, nume, varsta, descriere)
+VALUES(5, 'Fletcher', 29, 'American singer and songwriter');
+insert into artist(artist_id, nume, varsta, descriere)
+values(6, 'Dilja', 21, 'Icelandic singer');
+insert into artist(artist_id, nume, varsta, descriere)
+values(7, 'Brunette', 21, 'Armenian singer-songwriter');
+insert into artist(artist_id, nume, varsta, descriere)
+values(8, 'anees', 30, 'American singer, rapper, and songwriter');
+insert into artist(artist_id, nume, varsta, descriere)
+values(9, 'Sonder', null, 'Band created by the artist Brent Faiyaz');
+insert into artist(artist_id, nume, varsta, descriere)
+values(10, 'Brent Faiyaz', 27, 'American R'||'&'||'B singer');
+insert into artist(artist_id, nume, varsta, descriere)
+values(11,’Usher’, 44, 'American R'||'&'||'B singer');
+
+–tabelul melodie
+	
+	
+INSERT INTO MELODIE(melodie_id, titlu, descriere,durata, data_lansare, album_id,
+artist_id)
+VALUES(1,'If I Ain't Got You', '', 228, to_date('17-02-2004','dd-mm-yyyy'),1,1);
+INSERT INTO MELODIE(melodie_id, titlu, descriere,durata, data_lansare, album_id,
+artist_id)
+VALUES (2,'So Done','',236,TO_DATE('14-08-2020','dd-mm-yyyy'),1,1);
+INSERT INTO MELODIE(melodie_id, titlu, descriere,durata, data_lansare, album_id,
+artist_id)
+VALUES (3,'Girl on Fire','', 224,TO_DATE('22-11-2012','DD-MM-YYYY'),1,1);
+INSERT INTO MELODIE(melodie_id, titlu, descriere,durata, data_lansare, album_id,
+artist_id)
+VALUES (4,'My Boo','',223,to_date('29-08-2004','dd-mm-yyyy'),1,1);
+INSERT INTO MELODIE(melodie_id, titlu, descriere,durata, data_lansare, album_id,
+artist_id)
+VALUES (5,'No One','', 254, to_date('09-10-2007','dd-mm-yyyy'),1,1);
+INSERT INTO MELODIE(melodie_id, titlu, descriere,durata, data_lansare, album_id,
+artist_id)
+VALUES (6,'Fallin''','',210, to_date('10-04-2001','dd-mm-yyyy'),1,1);
+INSERT INTO MELODIE(melodie_id, titlu, descriere,durata, data_lansare, album_id,
+artist_id)
+VALUES(7,'Empire State of Mind','',216, to_date('20-10-2009','dd-mm-yyyy'),1,1);
+INSERT INTO MELODIE(melodie_id, titlu, descriere,durata, data_lansare, album_id,
+artist_id)
+VALUES(8,'You don''t know my name','',366, to_date('10-11-2003','dd-mm-yyyy'),1,1);
+INSERT INTO MELODIE(melodie_id, titlu, descriere,durata, data_lansare, album_id,
+artist_id)
+VALUES(9,'Slow Down','', 258, to_date('02-12-2003','dd-mm-yyyy'),1,1);
+INSERT INTO MELODIE(melodie_id, titlu, descriere,durata, data_lansare, album_id,
+artist_id)
+VALUES(10,'Underdog','',204, to_date('09-01-2020','dd-mm-yyyy'),1,1);
+INSERT INTO MELODIE(melodie_id, titlu, descriere,durata, data_lansare, album_id,
+artist_id)
+VALUES(11,'Like You''ll Never See Me Again', '', 315, to_date('25-10-2007','dd-mm-yyyy'), 1,1);
+INSERT INTO MELODIE(melodie_id, titlu, descriere, durata, data_lansare, album_id,
+artist_id)
+VALUES(12, 'Because of You','',266, TO_DATE('13-02-2007','DD-MM-YYYY'), NULL,2);
+INSERT INTO MELODIE(melodie_id, titlu, descriere, durata, data_lansare, album_id,
+artist_id)
+VALUES(13,'So Sick', '',207, TO_DATE('21-11-2005','DD-MM-YYYY'), NULL, 2);
+INSERT INTO MELODIE(melodie_id, titlu, descriere, durata, data_lansare, album_id,
+artist_id)
+VALUES(14,'Miss Independent','',232,to_date('26-08-2008','dd-mm-yyyy'),null, 2);
+INSERT INTO MELODIE(melodie_id, titlu, descriere, durata, data_lansare, album_id,
+artist_id)
+VALUES(15,'Sexy Love','',220,to_date('06-06-2006','dd-mm-yyyy'), null, 2);
+INSERT INTO MELODIE(melodie_id, titlu, descriere, durata, data_lansare, album_id,
+artist_id)
+VALUES(16,'She Knows', '', 214, to_date('16-09-2014','dd-mm-yyyy'), null, 2);
+INSERT INTO MELODIE(melodie_id, titlu, descriere, durata, data_lansare, album_id,
+artist_id)
+VALUES(17, 'Mad', '', 254, to_date('17-11-2008','dd-mm-yyyy'), null, 2);
+INSERT INTO MELODIE(melodie_id, titlu, descriere, durata, data_lansare, album_id,
+artist_id)
+VALUES(18, 'Time of Our Lives', '', 229, to_date('17-11-2014','dd-mm-yyyy'), null, 2);
+INSERT INTO MELODIE(melodie_id, titlu, descriere, durata, data_lansare, album_id,
+artist_id)
+VALUES(19, 'U 2 Luv', '', 209, to_date('29-05-2020', 'dd-mm-yyyy'), null, 2);
+INSERT INTO MELODIE(melodie_id, titlu, descriere, durata, data_lansare, album_id,
+artist_id)
+VALUES(20, 'One in a Million','',244, to_date('14-09-2010','dd-mm-yyyy'),null, 2);
+INSERT INTO MELODIE(melodie_id, titlu, descriere, durata, data_lansare, album_id,
+artist_id)
+VALUES(21, 'Closer', '', 235, to_date('15-04-2008','dd-mm-yyyy'), null, 2);
+insert into melodie(melodie_id, titlu, descriere, durata, data_lansare, album_id, artist_id)
+values(22, 'POWER', '', 184, to_date('04-03-2023','dd-mm-yyyy'), null, 6);
+insert into melodie(melodie_id, titlu, descriere, durata, data_lansare, album_id, artist_id)
+values(23, 'Future Lover', '', 166, to_date('15-03-2023','dd-mm-yyyy'), null, 7);
+insert into melodie(melodie_id, titlu, descriere, durata, data_lansare, album_id, artist_id)
+values(24, 'Sun and Moon', '', 224, to_date('06-04-2022','dd-mm-yyyy'), null, 8);
+insert into melodie(melodie_id, titlu, descriere, durata, data_lansare, album_id, artist_id)
+values(25, 'Searchin', '', 264, to_date('27-01-2017','dd-mm-yyyy'), null, 9);
+insert into melodie(melodie_id, titlu, descriere, durata, data_lansare, album_id, artist_id)
+values(26, 'Fuck The World (Summer in London)', '', 237,
+to_date('07-02-2020','dd-mm-yyyy'), null, 10);
+insert into melodie(melodie_id, titlu, descriere, durata, data_lansare, album_id, artist_id)
+values(27, 'My Boo', '', 223, to_date('29-08-2004','dd-mm-yyyy'), null, 11);
+insert into melodie(melodie_id, titlu, descriere, durata, data_lansare, album_id, artist_id)
+values(28, 'Rolling in the Deep', '', 228, to_date('29-11-2010','dd-mm-yyyy'), 3, 3);
+insert into melodie(melodie_id, titlu, descriere, durata, data_lansare, album_id, artist_id)
+values(29, 'Rumour Has It', '', 223, to_date('05-11-2011','dd-mm-yyyy'), 3, 3);
+insert into melodie(melodie_id, titlu, descriere, durata, data_lansare, album_id, artist_id)
+values(30, 'Turning Tables', '', 249, to_date('19-01-2011','dd-mm-yyyy'), 3, 3);
+insert into melodie(melodie_id, titlu, descriere, durata, data_lansare, album_id, artist_id)
+values(31, 'Set Fire to the Rain', '', 242, to_date('21-11-2011','dd-mm-yyyy'), 3, 3);
+insert into melodie(melodie_id, titlu, descriere, durata, data_lansare, album_id, artist_id)
+values(32, 'Someone Like You', '', 284, to_date('09-08-2011','dd-mm-yyyy'), 3, 3);
+insert into melodie(melodie_id, titlu, descriere, durata, data_lansare, album_id, artist_id)
+values(33, 'Hello', '', 295, to_date('23-10-2015','dd-mm-yyyy'), 4, 3);
+insert into melodie(melodie_id, titlu, descriere, durata, data_lansare, album_id, artist_id)
+values(34, 'Send My Love', '', 222, to_date('16-05-2016','dd-mm-yyyy'), 4, 3);
+insert into melodie(melodie_id, titlu, descriere, durata, data_lansare, album_id, artist_id)
+values(35, 'When We Were Young', '', 290, to_date('22-01-2016','dd-mm-yyyy'), 4, 3);
+insert into melodie(melodie_id, titlu, descriere, durata, data_lansare, album_id, artist_id)
+values(36, 'Love In The Dark', '', 285, to_date('20-11-2015','dd-mm-yyyy'), 4, 3);
+insert into melodie(melodie_id, titlu, descriere, durata, data_lansare, album_id, artist_id)
+values(37, 'All I Ask', '', 285, to_date('20-11-2015','dd-mm-yyyy'), 4, 3);
+insert into melodie(melodie_id, titlu, descriere, durata, data_lansare, album_id, artist_id)
+values(38, 'Can I Get It', '', 210, to_date('19-11-2021','dd-mm-yyyy'), 5, 3);
+insert into melodie(melodie_id, titlu, descriere, durata, data_lansare, album_id, artist_id)
+values(39, 'I Drink Wine', '', 376, to_date('19-11-2021','dd-mm-yyyy'), 5, 3);
+insert into melodie(melodie_id, titlu, descriere, durata, data_lansare, album_id, artist_id)
+values(40, 'All Night Parking', '', 161, to_date('19-11-2021','dd-mm-yyyy'), 5, 3);
+insert into melodie(melodie_id, titlu, descriere, durata, data_lansare, album_id, artist_id)
+values(41, 'Too Late', '', 239, to_date('20-03-20w0','dd-mm-yyyy'), 6, 4);
+insert into melodie(melodie_id, titlu, descriere, durata, data_lansare, album_id, artist_id)
+values(42, 'Scared To Live', '', 191, to_date('23-03-2020','dd-mm-yyyy'), 6, 4);
+insert into melodie(melodie_id, titlu, descriere, durata, data_lansare, album_id, artist_id)
+values(43, 'Heartless', '', 197, to_date('27-11-2019','dd-mm-yyyy'), 6, 4);
+insert into melodie(melodie_id, titlu, descriere, durata, data_lansare, album_id, artist_id)
+values(44, 'How Do I Make You Love Me? ', '', 214, to_date('22-07-2022','dd-mm-yyyy'), 7, 4);
+insert into melodie(melodie_id, titlu, descriere, durata, data_lansare, album_id, artist_id)
+values(45, 'Take My Breath', '', 339, to_date('06-08-2021','dd-mm-yyyy'), 7, 4);
+insert into melodie(melodie_id, titlu, descriere, durata, data_lansare, album_id, artist_id)
+values(46, 'Is There Someone Else?', '', 197, to_date('07-01-2023','dd-mm-yyyy'), 7, 4);
+insert into melodie(melodie_id, titlu, descriere, durata, data_lansare, album_id, artist_id)
+values(47, 'Call Out My Name', '', 228, to_date('12-04-2018','dd-mm-yyyy'), 8, 4);
+insert into melodie(melodie_id, titlu, descriere, durata, data_lansare, album_id, artist_id)
+values(48, 'Try Me', '', 220, to_date('07-04-2018','dd-mm-yyyy'), 8, 4);
+insert into melodie(melodie_id, titlu, descriere, durata, data_lansare, album_id, artist_id)
+values(49, 'Starboy', '', 230, to_date('25-11-2016','dd-mm-yyyy'), 9, 4);
+insert into melodie(melodie_id, titlu, descriere, durata, data_lansare, album_id, artist_id)
+values(50, 'False Alarm', '', 220, to_date('29-09-2016','dd-mm-yyyy'), 9, 4);
+insert into melodie(melodie_id, titlu, descriere, durata, data_lansare, album_id, artist_id)
+values(51, 'Reminder', '', 218, to_date('01-08-2017','dd-mm-yyyy'), 9, 4);
+insert into melodie(melodie_id, titlu, descriere, durata, data_lansare, album_id, artist_id)
+values(52, 'Rockin', '', 232, to_date('09-05-2017','dd-mm-yyyy'), 9, 4);
+insert into melodie(melodie_id, titlu, descriere, durata, data_lansare, album_id, artist_id)
+values(53, 'Sting', '', 186, to_date('01-09-2022','dd-mm-yyyy'), 10, 5);
+insert into melodie(melodie_id, titlu, descriere, durata, data_lansare, album_id, artist_id)
+values(54, 'Becky''s So Hot', '', 162, to_date('01-09-2022','dd-mm-yyyy'), 10, 5);
+insert into melodie(melodie_id, titlu, descriere, durata, data_lansare, album_id, artist_id)
+values(55, 'Silence', '', 155, to_date('09-09-2020','dd-mm-yyyy'), 11, 5);
+insert into melodie(melodie_id, titlu, descriere, durata, data_lansare, album_id, artist_id)
+values(56, 'If I Hated You', '', 212, to_date('12-08-2020','dd-mm-yyyy'), 11, 5);
+insert into melodie(melodie_id, titlu, descriere, durata, data_lansare, album_id, artist_id)
+values(57, 'Bitter', '', 194, to_date('13-05-2020','dd-mm-yyyy'), 11, 5);
+insert into melodie(melodie_id, titlu, descriere, durata, data_lansare, album_id, artist_id)
+values(58, 'The One', '', 181, to_date('04-09-2020','dd-mm-yyyy'), 11, 5);
+insert into melodie(melodie_id, titlu, descriere, durata, data_lansare, album_id, artist_id)
+values(59, 'Feel', '', 182, to_date('21-08-2020','dd-mm-yyyy'), 11, 5)
+
+
+
+–tabelul ALBUM:
+	
+INSERT INTO ALBUM(album_id, gen, pret, data_lansare, artist_id, titlu)
+VALUES(1, 'R'||'&' ||'B', 69.99, to_date('04-11-2016','dd-mm-yyyy'), 1, ‘HERE’);
+INSERT INTO ALBUM(album_id, gen, pret, data_lansare, artist_id, titlu)
+VALUES(2, 'R'||'&' ||'B', 59.99, to_date('28-02-2006','dd-mm-yyyy'), 2, 'In My Own Words');
+INSERT INTO ALBUM(album_id, gen, pret, data_lansare, artist_id, titlu)
+
+VALUES(3, 'Pop', 54.99, to_date('24-01-2011','dd-mm-yyyy'), 3, '21');
+INSERT INTO ALBUM(album_id, gen, pret, data_lansare, artist_id, titlu)
+VALUES(4, 'Indie', 39.99, to_date('20-11-2015','dd-mm-yyyy'), 3, '25');
+INSERT INTO ALBUM(album_id, gen, pret, data_lansare, artist_id, titlu)
+VALUES(5, 'Pop', 40.99, to_date('19-11-2021','dd-mm-yyyy'), 3, '30');
+INSERT INTO ALBUM(album_id, gen, pret, data_lansare, artist_id, titlu)
+VALUES(6,'R'||'&'||'B', 55.99, to_date('20-03-2020','dd-mm-yyyy'), 4, 'After Hours');
+INSERT INTO ALBUM(album_id, gen, pret, data_lansare, artist_id, titlu)
+VALUES(7,'R'||'&'||'B', 63.99, to_date('07-01-2022','dd-mm-yyyy'),4,'Dawn FM');
+INSERT INTO ALBUM(album_id, gen, pret, data_lansare, artist_id, titlu)
+VALUES(8, 'R'||'&'||'B', 31.99, to_date('30-03-2018','dd-mm-yyyy'), 4, 'My dear
+Melancholy');
+INSERT INTO ALBUM(album_id, gen, pret, data_lansare, artist_id, titlu)
+VALUES(9, 'R'||'&'||'B', 99.99, to_date('25-11-2016','dd-mm-yyyy'), 4, 'Starboy');
+INSERT INTO ALBUM(album_id, gen, pret, data_lansare, artist_id, titlu)
+VALUES(10, 'Pop', 90.99, to_date('16-09-2022','dd-mm-yyyy'), 5,'Girl Of My Dreams
+(Deluxe)');
+INSERT INTO ALBUM(album_id, gen, pret, data_lansare, artist_id, titlu)
+VALUES(11, 'Pop', 99.99, to_date('09-09-2020','dd-mm-yyyy'), 5, 'THE S(EX) TAPES');
+
+
+–tabelul PLAYLIST:
+	
+	
+INSERT INTO PLAYLIST(playlist_id, titlu, data_creare)
+VALUES(1, ‘Alicia Keys songs’, to_date('11-05-2023','dd-mm-yyyy'));
+INSERT INTO PLAYLIST(playlist_id, titlu, data_creare)
+VALUES(2, 'On Repeat', to_date('04-05-2020','dd-mm-yyyy'));
+INSERT INTO PLAYLIST(playlist_id, titlu, data_creare)
+VALUES(3, 'Disney', to_date('06-03-2023','dd-mm-yyyy'));
+INSERT INTO PLAYLIST(playlist_id, titlu, data_creare)
+VALUES(4, 'My Playlist #4', to_date('13-09-2019','dd-mm-yyyy'));
+INSERT INTO PLAYLIST(playlist_id, titlu, data_creare)
+VALUES(5, 'mare', to_date('04-12-2021','dd-mm-yyyy'));
+INSERT INTO PLAYLIST(playlist_id, titlu, data_creare)
+VALUES(6, 'r', to_date('27-08-2017', 'dd-mm-yyyy'));
+INSERT INTO PLAYLIST(playlist_id, titlu, data_creare)
+VALUES(7, 'rb', to_date('01-01-2020', 'dd-mm-yyyy'));
+INSERT INTO PLAYLIST(playlist_id, titlu, data_creare)
+VALUES(8, '.', to_date('13-03-2021', 'dd-mm-yyyy'));
+INSERT INTO PLAYLIST(playlist_id, titlu, data_creare)
+VALUES(9, '<bG', to_date('09-12-2021','dd-mm-yyyy'));
+INSERT INTO PLAYLIST(playlist_id, titlu, data_creare)
+VALUES(10, '00', to_date('15-02-2021', 'dd-mm-yyyy'));
+INSERT INTO PLAYLIST(playlist_id, titlu, data_creare)
+VALUES(11, 'the weeknd', to_date('02-08-2022', 'dd-mm-yyyy'));
+INSERT INTO PLAYLIST(playlist_id, titlu, data_creare)
+VALUES(12, 'c', to_date('04-05-2023','dd-mm-yyyy'));
+
+
+
+–tabelul UTILIZATOR:
+
+
+INSERT INTO UTILIZATOR(utilizator_id, nume_utilizator, parola, email, data_nastere, tara)
+VALUES(1, mara13, 'parola123', mara.spataru03@gmail.com',
+to_date('13-04-2003','dd-mm-yyyy'), ‘RO’);
+INSERT INTO UTILIZATOR(utilizator_id, nume_utilizator, parola, email, data_nastere, tara)
+VALUES(2, 'thelibrasavannah', 'parola123', 'thelibra@yahoo.com',
+to_date('08-09-2003','dd-mm-yyyy'), 'US');
+INSERT INTO UTILIZATOR(utilizator_id, nume_utilizator, parola, email, data_nastere, tara)
+values(3, 'boatelcy', 'parola123', 'boat.company@gmail.com', to_date('27-08-2007',
+'dd-mm-yyyy'), 'CA');
+INSERT INTO UTILIZATOR(utilizator_id, nume_utilizator, parola, email, data_nastere, tara)
+values(4,'Finalka', 'parola123', 'fin.finn@gmail.com', to_date('13-03-2002','dd-mm-yyyy'), 'RO');
+INSERT INTO UTILIZATOR(utilizator_id, nume_utilizator, parola, email, data_nastere,tara)
+values(5,'Johnadbo','parola123', 'john.boa@gmail.com', to_date('17-09-2000','dd-mm-yyyy'), 'IT');
+INSERT INTO UTILIZATOR(utilizator_id, nume_utilizator, parola, email, data_nastere, tara)
+VALUES(6, 'Allotikri', 'parola123', 'leon.sam@yahoo.com',
+to_date('23-02-1999','dd-mm-yyyy'), 'NL');
+INSERT INTO UTILIZATOR(utilizator_id, nume_utilizator, parola, email, data_nastere, tara)
+VALUES(7, 'Myzgeo', 'parola123', 'mandyg412@gmail.com',
+to_date('08-09-2003','dd-mm-yyyy'), 'RO');
+INSERT INTO UTILIZATOR(utilizator_id, nume_utilizator, parola, email, data_nastere,tara)
+values(8, 'Pltoex', 'parola123', 'alex.mex@yahoo.com', to_date('14-05-2005', 'dd-mm-yyyy'),'DK');
+INSERT INTO UTILIZATOR(utilizator_id, nume_utilizator, parola, email, data_nastere, tara)
+values(9, 'Matweeknd' , 'parola123', 'matthew.xo@gmail.com',
+to_date('04-12-2003','dd-mm-yyyy'), 'FI');
+INSERT INTO UTILIZATOR(utilizator_id, nume_utilizator, parola, email, data_nastere, tara)
+values(10, 'Fletch04', 'parola123', 'fletcher.a@yahoo.com',
+to_date('04-06-2006','dd-mm-yyyy'), 'ES');
+INSERT INTO UTILIZATOR(utilizator_id, nume_utilizator, parola, email, data_nastere,tara)
+VALUES(11, 'vestovlone', 'parola123', 'vincent23@gmail,com',
+to_date('21-03-2004','dd-mm-yyyy'), 'RO');
+INSERT INTO UTILIZATOR(utilizator_id, nume_utilizator, parola, email, data_nastere, tara)
+values(12, 'vlonefour', 'parola123', 'fourment.a23@gmail.com', to_date('12-12-2012',
+'dd-mm-yyyy'), 'NL');
+
+
+–tabelul EPISOD: 
+
+
+insert into EPISOD(episod_id, podcast_id, titlu)
+VALUES(1, 1, 'The Killer Brothers Pt. 1');
+insert into EPISOD(episod_id, podcast_id, titlu)
+VALUES(2, 1, 'The Killer Brothers Pt. 2');
+insert into EPISOD(episod_id, podcast_id, titlu)
+values(3,1,'"The Buried Bodies Killer" Robert Garrow Pt. 1');
+insert into EPISOD(episod_id, podcast_id, titlu)
+values(4, 1, '"The Buried Bodies Killer" Robert Garrow Pt. 2');
+insert into EPISOD(episod_id, podcast_id, titlu)
+values(5, 2,'Primul Episod : Misterul reginei frumusetii ai anilor ''90 (Cazul JonBenet
+Ramsey)');
+insert into EPISOD(episod_id, podcast_id, titlu)
+values(6, 2,'Episodul 2: Disparitia lui Madeline McCann');
+insert into EPISOD(episod_id, podcast_id, titlu)
+values(7,2,'Episodul 3: Cultul lui Charles Manson - Cum arata "Procesul Secolului"');
+insert into EPISOD(episod_id, podcast_id, titlu)
+values(8,2,'Episodul 4 : Este Ted Bundy cel mai malefic om a Americii anilor ''70?');
+insert into EPISOD(episod_id, podcast_id, titlu)
+values(9,3, 'Sezonul 1, Episodul 1 - Introducere in Arhitectura Cerebrala');
+insert into EPISOD(episod_id, podcast_id, titlu)
+values(10,3, 'Sezonul 1, Episodul 2 - Calaretul si elefantul din capul fiecaruia dintre noi');
+insert into EPISOD(episod_id, podcast_id, titlu)
+values(11, 4, '"E gratis sa oferi un zambet!" - LA FILEU cu Levi Elekes');
+insert into EPISOD(episod_id, podcast_id, titlu)
+values(12,5, 'Blues extraterestri si chemtrails');
+insert into EPISOD(episod_id, podcast_id, titlu)
+values(13, 6, 'BACKPACKYOURLIFE: CU UN GHIOZDAN IN JURUL LUMII');
+insert into EPISOD(episod_id, podcast_id, titlu)
+values(14,7, 'How "second chance" laws could transform the US justice system | Sheena Meade');
+insert into EPISOD(episod_id, podcast_id, titlu)
+values(15, 8, 'Jocurile Mintii- Ep.1-"Sa iti dai voie si tie sa existi"');
+insert into EPISOD(episod_id, podcast_id, titlu)
+values(16, 9, 'Iubire versus Atasament - 5 diferente');
+insert into EPISOD(episod_id, podcast_id, titlu)
+values(17, 10, 'Dr. Gheorghe Gica | Recoltarea Celulelor Stem la nastere');
+
+
+–tabelul PODCAST:
+	
+	
+insert into podcast(podcast_id, nume, nr_episoade, nume_autor)
+values(1,'Serial Killers', 4,’Parcast’);
+insert into podcast(podcast_id, nume, nr_episoade, nume_autor)
+values(2, 'Crime, Pisici si Cafea', 4, 'Alerina');
+insert into podcast(podcast_id, nume, nr_episoade, nume_autor)
+values(3, 'Mind Architect', 2, 'Mind Architect');
+INSERT INTO podcast(podcast_id, nume, nr_episoade, nume_autor)
+VALUES (4, 'La Fileu', 1, 'Speak');
+insert into podcast(podcast_id, nume, nr_episoade, nume_autor)
+values(5, 'MCN Podcast', 1, 'MCN Podcast');
+insert into podcast(podcast_id, nume, nr_episoade, nume_autor)
+values(6, 'Vin de-o poveste', 1, 'Radu Tibulca');
+insert into podcast(podcast_id, nume, nr_episoade, nume_autor)
+values(7,'TED Talks Daily', 1, 'TED');
+insert into podcast(podcast_id, nume, nr_episoade, nume_autor)
+values(8, 'Jocurile Mintii', 1, 'Raluca Anton');
+insert into podcast(podcast_id, nume, nr_episoade, nume_autor)
+values(9, 'Secrete de la Psiholog', 1, 'Psiholog Alexandru Plesea');
+insert into podcast(podcast_id, nume, nr_episoade, nume_autor)
+values(10,'Podcastul medical', 1, 'Cristian Badescu');
+
+–tabelul ARTIST_canta_MELODIE:
+	
+	
+insert into artist_canta_melodie(artist_id, melodie_id)
+values(1,1);
+insert into artist_canta_melodie(artist_id, melodie_id)
+values(1,2);
+insert into artist_canta_melodie(artist_id, melodie_id)
+values(1,3);
+insert into artist_canta_melodie(artist_id, melodie_id)
+values(1,4);
+insert into artist_canta_melodie(artist_id, melodie_id)
+values(1,5);
+insert into artist_canta_melodie(artist_id, melodie_id)
+values(1,6);
+insert into artist_canta_melodie(artist_id, melodie_id)
+values(1,7);
+insert into artist_canta_melodie(artist_id, melodie_id)
+values(1,8);
+insert into artist_canta_melodie(artist_id, melodie_id)
+values(1,9);
+insert into artist_canta_melodie(artist_id, melodie_id)
+values(1,10);
+insert into artist_canta_melodie(artist_id, melodie_id)
+values(1,11);
+insert into artist_canta_melodie(artist_id, melodie_id)
+values(2,12);
+insert into artist_canta_melodie(artist_id, melodie_id)
+values(2,18);
+insert into artist_canta_melodie(artist_id, melodie_id)
+values(2,19);
+insert into artist_canta_melodie(artist_id, melodie_id)
+values(2,20);
+insert into artist_canta_melodie(artist_id, melodie_id)
+values(2,21);
+insert into artist_canta_melodie(artist_id, melodie_id)
+values(2,22);
+insert into artist_canta_melodie(artist_id, melodie_id)
+values(2,23);
+insert into artist_canta_melodie(artist_id, melodie_id)
+values(2,24);
+insert into artist_canta_melodie(artist_id, melodie_id)
+values(2,25);
+insert into artist_canta_melodie(artist_id, melodie_id)
+values(2,26);
+insert into artist_canta_melodie(artist_id, melodie_id)
+values(6,13);
+insert into artist_canta_melodie(artist_id, melodie_id)
+values(7,14);
+insert into artist_canta_melodie(artist_id, melodie_id)
+values(8,15);
+insert into artist_canta_melodie(artist_id, melodie_id)
+values(9,16);
+insert into artist_canta_melodie(artist_id, melodie_id)
+values(10,17);
+
+
+–tabelul UTILIZATOR_apreciaza_ALBUM:
+
+insert into utilizator_apreciaza_album(utilizator_id, ALBUM_ID)
+values(1,1);
+insert into utilizator_apreciaza_album(utilizator_id, ALBUM_ID)
+values(1,2);
+insert into utilizator_apreciaza_album(utilizator_id, ALBUM_ID)
+values(1,7);
+insert into utilizator_apreciaza_album(utilizator_id, ALBUM_ID)
+values(1,11);
+insert into utilizator_apreciaza_album(utilizator_id, ALBUM_ID)
+values(2, 5);
+insert into utilizator_apreciaza_album(utilizator_id, ALBUM_ID)
+values(2,8);
+insert into utilizator_apreciaza_album(utilizator_id, ALBUM_ID)
+values(2, 3);
+insert into utilizator_apreciaza_album(utilizator_id, ALBUM_ID)
+values(5,10);
+insert into utilizator_apreciaza_album(utilizator_id, ALBUM_ID)
+values(6,10);
+insert into utilizator_apreciaza_album(utilizator_id, ALBUM_ID)
+values(7,10);
+insert into utilizator_apreciaza_album(utilizator_id, ALBUM_ID)
+values(10,10);
+insert into utilizator_apreciaza_album(utilizator_id, ALBUM_ID)
+values(10,11);
+
+
+–tabelul UTILIZATOR_urmareste_ARTIST:
+
+
+insert into utilizator_urmareste_artist(utilizator_id, artist_id)
+values(1,1);
+insert into utilizator_urmareste_artist(utilizator_id, artist_id)
+values(1,2);
+insert into utilizator_urmareste_artist(utilizator_id, artist_id)
+values(1,3);
+insert into utilizator_urmareste_artist(utilizator_id, artist_id)
+values(1,4);
+insert into utilizator_urmareste_artist(utilizator_id, artist_id)
+values(1,5);
+insert into utilizator_urmareste_artist(utilizator_id, artist_id)
+values(1,6);
+insert into utilizator_urmareste_artist(utilizator_id, artist_id)
+values(1,7);
+insert into utilizator_urmareste_artist(utilizator_id, artist_id)
+values(1,8);
+insert into utilizator_urmareste_artist(utilizator_id, artist_id)
+values(1,9);
+insert into utilizator_urmareste_artist(utilizator_id, artist_id)
+values(1,10);
+insert into utilizator_urmareste_artist(utilizator_id, artist_id)
+values(7,3);
+insert into utilizator_urmareste_artist(utilizator_id, artist_id)
+values(5,2);
+insert into utilizator_urmareste_artist(utilizator_id, artist_id)
+values(8,4);
+insert into utilizator_urmareste_artist(utilizator_id, artist_id)
+values(9,10);
+insert into utilizator_urmareste_artist(utilizator_id, artist_id)
+values(7,10);
+
+
+
+–tabelul MELODIE_in_PLAYLIST_UTILIZATOR:
+
+	insert into melodie_in_playlist_utilizator(melodie_id, playlist_id, utilizator_id,
+data_adaugare)
+values(1,1,1,to_date('11-05-2023','dd-mm-yyyy'));
+insert into melodie_in_playlist_utilizator(melodie_id, playlist_id, utilizator_id,
+data_adaugare)
+values(2,1,1,to_date('12-12-2014','dd-mm-yyyy'));
+insert into melodie_in_playlist_utilizator(melodie_id, playlist_id, utilizator_id,
+data_adaugare)
+values(2,1,4,to_date('12-12-2014','dd-mm-yyyy'));
+insert into melodie_in_playlist_utilizator(melodie_id, playlist_id, utilizator_id,
+data_adaugare)
+values(2,1,9, to_date('12-12-2014','dd-mm-yyyy'));
+insert into melodie_in_playlist_utilizator(melodie_id, playlist_id, utilizator_id,
+data_adaugare)
+values(2,1,2, to_date('14-12-2014','dd-mm-yyyy'));
+insert into melodie_in_playlist_utilizator(melodie_id, playlist_id, utilizator_id,
+data_adaugare)
+values(2,2,4, to_date('16-12-2014','dd-mm-yyyy'));
+insert into melodie_in_playlist_utilizator(melodie_id, playlist_id, utilizator_id,
+data_adaugare)
+values(2,2,9, to_date('16-12-2014','dd-mm-yyyy'));
+insert into melodie_in_playlist_utilizator(melodie_id, playlist_id, utilizator_id,
+data_adaugare)
+values(2,7,4, to_date('18-12-2014','dd-mm-yyyy'));
+insert into melodie_in_playlist_utilizator(melodie_id, playlist_id, utilizator_id,
+data_adaugare)
+values(2,7,9, to_date('18-12-2014','dd-mm-yyyy'));
+insert into melodie_in_playlist_utilizator(melodie_id, playlist_id, utilizator_id,
+data_adaugare)
+values(2,7,1, to_date('18-12-2014','dd-mm-yyyy'));
+insert into melodie_in_playlist_utilizator(melodie_id, playlist_id, utilizator_id,
+data_adaugare)
+values(1,1,4, to_date('04-04-2020','dd-mm-yyyy'));
+insert into melodie_in_playlist_utilizator(melodie_id, playlist_id, utilizator_id,
+data_adaugare)
+values(1,1,10, to_date('04-04-2020','dd-mm-yyyy'));
+insert into melodie_in_playlist_utilizator(melodie_id, playlist_id, utilizator_id,
+data_adaugare)
+values(1,2,4, to_date('09-04-2020','dd-mm-yyyy'));
+insert into melodie_in_playlist_utilizator(melodie_id, playlist_id, utilizator_id,
+data_adaugare)
+values(1,2,9, to_date('09-04-2020','dd-mm-yyyy'));
+insert into melodie_in_playlist_utilizator(melodie_id, playlist_id, utilizator_id,
+data_adaugare)
+values(1,7,4, to_date('09-04-2020','dd-mm-yyyy'));
+insert into melodie_in_playlist_utilizator(melodie_id, playlist_id, utilizator_id,
+data_adaugare)
+values(1,7,10, to_date('09-04-2020','dd-mm-yyyy'));
+insert into melodie_in_playlist_utilizator(melodie_id, playlist_id, utilizator_id,
+data_adaugare)
+values(3,1,3, to_date('09-04-2020','dd-mm-yyyy'));
+insert into melodie_in_playlist_utilizator(melodie_id, playlist_id, utilizator_id,
+data_adaugare)
+values(3,1,7,to_date('09-04-2020','dd-mm-yyyy'));
+insert into melodie_in_playlist_utilizator(melodie_id, playlist_id, utilizator_id,
+data_adaugare)
+values(3,1,8, to_date('09-04-2020','dd-mm-yyyy'));
+insert into melodie_in_playlist_utilizator(melodie_id, playlist_id, utilizator_id,
+data_adaugare)
+values(3,1,2, to_date('09-04-2020','dd-mm-yyyy'));
+insert into melodie_in_playlist_utilizator(melodie_id, playlist_id, utilizator_id,
+data_adaugare)
+values(3,2,3, to_date('09-04-2020','dd-mm-yyyy'));
+insert into melodie_in_playlist_utilizator(melodie_id, playlist_id, utilizator_id,
+data_adaugare)
+values(3,2,7,to_date('09-04-2020','dd-mm-yyyy'));
+insert into melodie_in_playlist_utilizator(melodie_id, playlist_id, utilizator_id,
+data_adaugare)
+values(3,2,8,to_date('09-04-2020','dd-mm-yyyy'));
+insert into melodie_in_playlist_utilizator(melodie_id, playlist_id, utilizator_id,
+data_adaugare)
+values(3,2,2,to_date('09-04-2020','dd-mm-yyyy'));
+insert into melodie_in_playlist_utilizator(melodie_id, playlist_id, utilizator_id,
+data_adaugare)
+values(3,7,3,to_date('09-04-2020','dd-mm-yyyy'));
+insert into melodie_in_playlist_utilizator(melodie_id, playlist_id, utilizator_id,
+data_adaugare)
+values(3,7,7,to_date('09-04-2020','dd-mm-yyyy'));
+insert into melodie_in_playlist_utilizator(melodie_id, playlist_id, utilizator_id,
+data_adaugare)
+values(3,7,8, to_date('09-04-2020', 'dd-mm-yyyy'));
+insert into melodie_in_playlist_utilizator(melodie_id, playlist_id, utilizator_id,
+data_adaugare)
+values(3,7,2,to_date('10-04-2020','dd-mm-yyyy'));
+insert into melodie_in_playlist_utilizator(melodie_id, playlist_id, utilizator_id,
+data_adaugare)
+values(4,2,1,to_date('13-04-2021','dd-mm-yyyy'));
+insert into melodie_in_playlist_utilizator(melodie_id, playlist_id, utilizator_id,
+data_adaugare)
+values(4,2,2,to_date('13-04-2021','dd-mm-yyyy'));
+insert into melodie_in_playlist_utilizator(melodie_id, playlist_id, utilizator_id,
+data_adaugare)
+values(4,2,3, to_date('13-04-2021','dd-mm-yyyy'));
+insert into melodie_in_playlist_utilizator(melodie_id, playlist_id, utilizator_id,
+data_adaugare)
+values(4,7,1,to_date('13-04-2021','dd-mm-yyyy'));
+insert into melodie_in_playlist_utilizator(melodie_id, playlist_id, utilizator_id,
+data_adaugare)
+values(4,7,2,to_date('13-04-2021','dd-mm-yyyy'));
+insert into melodie_in_playlist_utilizator(melodie_id, playlist_id, utilizator_id,
+data_adaugare)
+values(4,7,3,to_date('13-04-2021','dd-mm-yyyy'));
+insert into melodie_in_playlist_utilizator(melodie_id, playlist_id, utilizator_id,
+data_adaugare)
+values(4,10,1,to_date('13-04-2021','dd-mm-yyyy'));
+insert into melodie_in_playlist_utilizator(melodie_id, playlist_id, utilizator_id,
+data_adaugare)
+values(4,10,2,to_date('13-04-2021','dd-mm-yyyy'));
+insert into melodie_in_playlist_utilizator(melodie_id, playlist_id, utilizator_id,
+data_adaugare)
+values(4,10,3,to_date('13-04-2021','dd-mm-yyyy'));
+insert into melodie_in_playlist_utilizator(melodie_id, playlist_id, utilizator_id,
+data_adaugare)
+values(5,1,4,to_date('10-08-2022','dd-mm-yyyy'));
+insert into melodie_in_playlist_utilizator(melodie_id, playlist_id, utilizator_id,
+data_adaugare)
+values(5,1,5,to_date('10-08-2022','dd-mm-yyyy'));
+insert into melodie_in_playlist_utilizator(melodie_id, playlist_id, utilizator_id,
+data_adaugare)
+values(5,1,6,to_date('10-08-2022','dd-mm-yyyy'));
+insert into melodie_in_playlist_utilizator(melodie_id, playlist_id, utilizator_id,
+data_adaugare)
+values(5,2,4,to_date('10-08-2022','dd-mm-yyyy'));
+insert into melodie_in_playlist_utilizator(melodie_id, playlist_id, utilizator_id,
+data_adaugare)
+values(5,2,5,to_Date('10-08-2022','dd-mm-yyyy'));
+insert into melodie_in_playlist_utilizator(melodie_id, playlist_id, utilizator_id,
+data_adaugare)
+values(5,2,6,to_date('10-08-2022','dd-mm-yyyy'));
+insert into melodie_in_playlist_utilizator(melodie_id, playlist_id, utilizator_id,
+data_adaugare)
+values(5,7,4,to_date('10-08-2022','dd-mm-yyyy'));
+insert into melodie_in_playlist_utilizator(melodie_id, playlist_id, utilizator_id,
+data_adaugare)
+values(5,7,5,to_date('10-08-2022','dd-mm-yyyy'));
+insert into melodie_in_playlist_utilizator(melodie_id, playlist_id, utilizator_id,
+data_adaugare)
+values(5,7,6,to_date('10-08-2022','dd-mm-yyyy'));
+insert into melodie_in_playlist_utilizator(melodie_id, playlist_id, utilizator_id,
+data_adaugare)
+values(5,10,4,to_date('10-08-2022','dd-mm-yyyy'));
+insert into melodie_in_playlist_utilizator(melodie_id, playlist_id, utilizator_id,
+data_adaugare)
+values(5,10,5,to_date('10-08-2022','dd-mm-yyyy'));
+insert into melodie_in_playlist_utilizator(melodie_id, playlist_id, utilizator_id,
+data_adaugare)
+values(5,10,6,to_date('10-08-2022','dd-mm-yyyy'));
+insert into melodie_in_playlist_utilizator(melodie_id, playlist_id, utilizator_id,
+data_adaugare)
+values(6,1,7,to_date('10-10-2010','dd-mm-yyyy'));
+insert into melodie_in_playlist_utilizator(melodie_id, playlist_id, utilizator_id,
+data_adaugare)
+values(6,2,7,to_date('10-10-2020','dd-mm-yyyy'));
+insert into melodie_in_playlist_utilizator(melodie_id, playlist_id, utilizator_id,
+data_adaugare)
+values(6,7,7,to_date('10-10-2010','dd-mm-yyyy'));
+insert into melodie_in_playlist_utilizator(melodie_id, playlist_id, utilizator_id,
+data_adaugare)
+values(6,10,7,to_date('10-10-2010','dd-mm-yyyy'));
+insert into melodie_in_playlist_utilizator(melodie_id, playlist_id, utilizator_id,
+data_adaugare)
+values(7,1,8,to_date('24-04-2022','dd-mm-yyyy'));
+insert into melodie_in_playlist_utilizator(melodie_id, playlist_id, utilizator_id,
+data_adaugare)
+values(7,1,10, to_date('24-04-2022','dd-mm-yyyy'));
+insert into melodie_in_playlist_utilizator(melodie_id, playlist_id, utilizator_id,
+data_adaugare)
+values(7,7,8,to_date('24-04-2022','dd-mm-yyyy'));
+insert into melodie_in_playlist_utilizator(melodie_id, playlist_id, utilizator_id,
+data_adaugare)
+values(7,7,10,to_date('24-04-2022','dd-mm-yyyy'));
+insert into melodie_in_playlist_utilizator(melodie_id, playlist_id, utilizator_id,
+data_adaugare)
+values(8,1,2,to_date('13-09-2015','dd-mm-yyyy'));
+insert into melodie_in_playlist_utilizator(melodie_id, playlist_id, utilizator_id,
+data_adaugare)
+values(8,1,3,to_date('13-09-2015','dd-mm-yyyy'));
+insert into melodie_in_playlist_utilizator(melodie_id, playlist_id, utilizator_id,
+data_adaugare)
+values(9,1,4,to_date('30-05-2020','dd-mm-yyyy'));
+insert into melodie_in_playlist_utilizator(melodie_id, playlist_id, utilizator_id,
+data_adaugare)
+values(9,1,5,to_date('30-05-2020','dd-mm-yyyy'));
+insert into melodie_in_playlist_utilizator(melodie_id, playlist_id, utilizator_id,
+data_adaugare)
+values(10,1,6,to_date('02-02-2022','dd-mm-yyyy'));
+insert into melodie_in_playlist_utilizator(melodie_id, playlist_id, utilizator_id,
+data_adaugare)
+values(10,1,7,to_date('02-02-2022','dd-mm-yyyy'));
+insert into melodie_in_playlist_utilizator(melodie_id, playlist_id, utilizator_id,
+data_adaugare)
+values(11,1,8,to_date('10-10-2020','dd-mm-yyyy'));
+insert into melodie_in_playlist_utilizator(melodie_id, playlist_id, utilizator_id,
+data_adaugare)
+values(11,1,10,to_date('10-10-2020','dd-mm-yyyy'));
+insert into melodie_in_playlist_utilizator(melodie_id, playlist_id, utilizator_id,
+data_adaugare)
+values(12,2,2,to_date('27-08-2020','dd-mm-yyyy'));
+insert into melodie_in_playlist_utilizator(melodie_id, playlist_id, utilizator_id,
+data_adaugare)
+values(12,7,2,to_date('27-08-2020','dd-mm-yyyy'));
+insert into melodie_in_playlist_utilizator(melodie_id, playlist_id, utilizator_id,
+data_adaugare)
+values(12,10,2,to_date('27-08-2020','dd-mm-yyyy'));
+insert into melodie_in_playlist_utilizator(melodie_id, playlist_id, utilizator_id,
+data_adaugare)
+values(12,2,3,to_date('27-08-2020','dd-mm-yyyy'));
+insert into melodie_in_playlist_utilizator(melodie_id, playlist_id, utilizator_id,
+data_adaugare)
+values(12,7,3, to_date('27-08-2020','dd-mm-yyyy'));
+insert into melodie_in_playlist_utilizator(melodie_id, playlist_id, utilizator_id,
+data_adaugare)
+values(12,10,3,to_date('27-08-2020','dd-mm-yyyy'));
+insert into melodie_in_playlist_utilizator(melodie_id, playlist_id, utilizator_id,
+data_adaugare)
+values(13,2,4,to_date('03-03-2023','dd-mm-yyyy'));
+insert into melodie_in_playlist_utilizator(melodie_id, playlist_id, utilizator_id,
+data_adaugare)
+values(13,7,4,to_date('03-03-2023','dd-mm-yyyy'));
+insert into melodie_in_playlist_utilizator(melodie_id, playlist_id, utilizator_id,
+data_adaugare)
+values(13,10,4,to_date('03-03-2023','dd-mm-yyyy'));
+insert into melodie_in_playlist_utilizator(melodie_id, playlist_id, utilizator_id,
+data_adaugare)
+values(14,2,5,to_date('05-05-2020','dd-mm-yyyy'));
+insert into melodie_in_playlist_utilizator(melodie_id, playlist_id, utilizator_id,
+data_adaugare)
+values(14,7,5,to_date('05-05-2020','dd-mm-yyyy'));
+insert into melodie_in_playlist_utilizator(melodie_id, playlist_id, utilizator_id,
+data_adaugare)
+values(14,10,5,to_date('05-05-2020','dd-mm-yyyy'));
+insert into melodie_in_playlist_utilizator(melodie_id, playlist_id, utilizator_id,
+data_adaugare)
+values(15,2,6,to_date('06-06-2021','dd-mm-yyyy'));
+insert into melodie_in_playlist_utilizator(melodie_id, playlist_id, utilizator_id,
+data_adaugare)
+values(15,7,6,to_date('06-06-2021','dd-mm-yyyy'));
+insert into melodie_in_playlist_utilizator(melodie_id, playlist_id, utilizator_id,
+data_adaugare)
+values(15,10,6,to_date('06-06-2021','dd-mm-yyyy'));
+insert into melodie_in_playlist_utilizator(melodie_id, playlist_id, utilizator_id,
+data_adaugare)
+values(16,7,8,to_date('07-07-2022', 'dd-mm-yyyy'));
+insert into melodie_in_playlist_utilizator(melodie_id, playlist_id, utilizator_id,
+data_adaugare)
+values(16,7,7,to_date('07-07-2022', 'dd-mm-yyyy'));
+insert into melodie_in_playlist_utilizator(melodie_id, playlist_id, utilizator_id,
+data_adaugare)
+values(17,7,10,to_date('07-07-2022','dd-mm-yyyy'));
+insert into melodie_in_playlist_utilizator(melodie_id, playlist_id, utilizator_id,
+data_adaugare)
+values(17,7,11, to_date('07-07-2022','dd-mm-yyyy'));
+insert into melodie_in_playlist_utilizator(melodie_id, playlist_id, utilizator_id,
+data_adaugare)
+values(18,7,11,to_date('08-08-2022','dd-mm-yyyy'));
+insert into melodie_in_playlist_utilizator(melodie_id, playlist_id, utilizator_id,
+data_adaugare)
+values(18,7,2,to_date('08-08-2022','dd-mm-yyyy'));
+insert into melodie_in_playlist_utilizator(melodie_id, playlist_id, utilizator_id,
+data_adaugare)
+values(19,7,11,to_date('01-04-2020','dd-mm-yyyy'));
+insert into melodie_in_playlist_utilizator(melodie_id, playlist_id, utilizator_id,
+data_adaugare)
+values(19,7,10,to_date('01-04-2020','dd-mm-yyyy'));
+insert into melodie_in_playlist_utilizator(melodie_id, playlist_id, utilizator_id,
+data_adaugare)
+values(20,2,1,to_date('04-12-2021','dd-mm-yyyy'));
+insert into melodie_in_playlist_utilizator(melodie_id, playlist_id, utilizator_id,
+data_adaugare)
+values(20,7,1,to_date('04-12-2021','dd-mm-yyyy'));
+insert into melodie_in_playlist_utilizator(melodie_id, playlist_id, utilizator_id,
+data_adaugare)
+values(20,9,1,to_date('04-12-2021','dd-mm-yyyy'));
+insert into melodie_in_playlist_utilizator(melodie_id, playlist_id, utilizator_id,
+data_adaugare)
+values(20,10,1,to_date('04-12-2021','dd-mm-yyyy'));
+insert into melodie_in_playlist_utilizator(melodie_id, playlist_id, utilizator_id,
+data_adaugare)
+values(20,2,7,to_date('04-12-2021','dd-mm-yyyy'));
+insert into melodie_in_playlist_utilizator(melodie_id, playlist_id, utilizator_id,
+data_adaugare)
+values(20,7,7,to_date('04-12-2021','dd-mm-yyyy'));
+insert into melodie_in_playlist_utilizator(melodie_id, playlist_id, utilizator_id,
+data_adaugare)
+values(20,9,7,to_date('04-12-2021','dd-mm-yyyy'));
+insert into melodie_in_playlist_utilizator(melodie_id, playlist_id, utilizator_id,
+data_adaugare)
+values(20,10,7,to_date('04-12-2021','dd-mm-yyyy'));
+insert into melodie_in_playlist_utilizator(melodie_id, playlist_id, utilizator_id,
+data_adaugare)
+values(21,7,1,to_date('04-12-2021','dd-mm-yyyy'));
+insert into melodie_in_playlist_utilizator(melodie_id, playlist_id, utilizator_id,
+data_adaugare)
+values(21,9,1,to_date('04-12-2021','dd-mm-yyyy'));
+insert into melodie_in_playlist_utilizator(melodie_id, playlist_id, utilizator_id,
+data_adaugare)
+values(21,7,7,to_date('04-12-2021','dd-mm-yyyy'));
+insert into melodie_in_playlist_utilizator(melodie_id, playlist_id, utilizator_id,
+data_adaugare)
+values(21,9,7,to_date('04-12-2021','dd-mm-yyyy'));
+insert into melodie_in_playlist_utilizator(melodie_id, playlist_id, utilizator_id,
+data_adaugare)
+values(22,2,3,to_date('09-06-2019','dd-mm-yyyy'));
+insert into melodie_in_playlist_utilizator(melodie_id, playlist_id, utilizator_id,
+data_adaugare)
+values(22,5,3,to_date('09-06-2019','dd-mm-yyyy'));
+insert into melodie_in_playlist_utilizator(melodie_id, playlist_id, utilizator_id,
+data_adaugare)
+values(22,12,3,to_date('09-06-2019','dd-mm-yyyy'));
+insert into melodie_in_playlist_utilizator(melodie_id, playlist_id, utilizator_id,
+data_adaugare)
+values(23,2,4,to_date('09-06-2019','dd-mm-yyyy'));
+insert into melodie_in_playlist_utilizator(melodie_id, playlist_id, utilizator_id,
+data_adaugare)
+values(23,5,4,to_date('09-06-2019','dd-mm-yyyy'));
+insert into melodie_in_playlist_utilizator(melodie_id, playlist_id, utilizator_id,
+data_adaugare)
+values(23,12,4,to_date('09-06-2019','dd-mm-yyyy'));
+insert into melodie_in_playlist_utilizator(melodie_id, playlist_id, utilizator_id,
+data_adaugare)
+values(24,2,6,to_date('10-08-2021','dd-mm-yyyy'));
+insert into melodie_in_playlist_utilizator(melodie_id, playlist_id, utilizator_id,
+data_adaugare)
+values(24,5,6,to_date('10-08-2021','dd-mm-yyyy'));
+insert into melodie_in_playlist_utilizator(melodie_id, playlist_id, utilizator_id,
+data_adaugare)
+values(24,9,6,to_date('10-08-2021','dd-mm-yyyy'));
+insert into melodie_in_playlist_utilizator(melodie_id, playlist_id, utilizator_id,
+data_adaugare)
+values(24,12,6,to_date('10-08-2021','dd-mm-yyyy'));
+insert into melodie_in_playlist_utilizator(melodie_id, playlist_id, utilizator_id,
+data_adaugare)
+values(25,2,8,to_date('10-08-2021','dd-mm-yyyy'));
+insert into melodie_in_playlist_utilizator(melodie_id, playlist_id, utilizator_id,
+data_adaugare)
+values(25,5,8,to_date('10-08-2021','dd-mm-yyyy'));
+insert into melodie_in_playlist_utilizator(melodie_id, playlist_id, utilizator_id,
+data_adaugare)
+values(25,7,8,to_date('10-08-2021','dd-mm-yyyy'));
+insert into melodie_in_playlist_utilizator(melodie_id, playlist_id, utilizator_id,
+data_adaugare)
+values(25,12,8,to_date('10-08-2021','dd-mm-yyyy'));
+insert into melodie_in_playlist_utilizator(melodie_id, playlist_id, utilizator_id,
+data_adaugare)
+values(26,2,11,to_date('12-02-2020','dd-mm-yyyy'));
+insert into melodie_in_playlist_utilizator(melodie_id, playlist_id, utilizator_id,
+data_adaugare)
+values(26,5,11,to_date('12-02-2020','dd-mm-yyyy'));
+insert into melodie_in_playlist_utilizator(melodie_id, playlist_id, utilizator_id,
+data_adaugare)
+values(26,7,11,to_date('12-02-2020','dd-mm-yyyy'));
+insert into melodie_in_playlist_utilizator(melodie_id, playlist_id, utilizator_id,
+data_adaugare)
+values(26,12,11,to_date('12-02-2020','dd-mm-yyyy'));
+
+–tabelul UTILIZATOR_apreciaza_PLAYLIST:
+
+	
+insert into utilizator_apreciaza_playlist(utilizator_id,playlist_id)
+values(1,1);
+insert into utilizator_apreciaza_playlist(utilizator_id,playlist_id)
+values(1,2);
+insert into utilizator_apreciaza_playlist(utilizator_id,playlist_id)
+values(1,4);
+insert into utilizator_apreciaza_playlist(utilizator_id,playlist_id)
+values(1,9);
+insert into utilizator_apreciaza_playlist(utilizator_id,playlist_id)
+values(2,1);
+insert into utilizator_apreciaza_playlist(utilizator_id,playlist_id)
+values(2,5);
+insert into utilizator_apreciaza_playlist(utilizator_id,playlist_id)
+values(2,12);
+insert into utilizator_apreciaza_playlist(utilizator_id,playlist_id)
+values(3,6);
+insert into utilizator_apreciaza_playlist(utilizator_id,playlist_id)
+values(3,7);
+insert into utilizator_apreciaza_playlist(utilizator_id,playlist_id)
+values(4,3);
+insert into utilizator_apreciaza_playlist(utilizator_id,playlist_id)
+values(4,4);
+insert into utilizator_apreciaza_playlist(utilizator_id,playlist_id)
+values(5,8);
+insert into utilizator_apreciaza_playlist(utilizator_id,playlist_id)
+values(6,10);
+insert into utilizator_apreciaza_playlist(utilizator_id,playlist_id)
+values(7,2);
+insert into utilizator_apreciaza_playlist(utilizator_id,playlist_id)
+values(7,5);
+insert into utilizator_apreciaza_playlist(utilizator_id,playlist_id)
+values(7,9);
+insert into utilizator_apreciaza_playlist(utilizator_id,playlist_id)
+values(8,7);
+insert into utilizator_apreciaza_playlist(utilizator_id,playlist_id)
+values(9,1);
+insert into utilizator_apreciaza_playlist(utilizator_id,playlist_id)
+values(10,8);
+insert into utilizator_apreciaza_playlist(utilizator_id,playlist_id)
+values(1,5);
+insert into utilizator_apreciaza_playlist(utilizator_id,playlist_id)
+values(1,12);
+
+
+–tabelul ISTORIC_MELODII:
+
+insert into istoric_melodii(istoric_melodii_id, utilizator_id, melodie_id, data_ascultare)
+values(1,1,1,to_date('11-05-2023','dd-mm-yyyy'));
+insert into istoric_melodii(istoric_melodii_id, utilizator_id, melodie_id, data_ascultare)
+values(2,2,2,to_date('10-09-2022','dd-mm-yyyy'));
+insert into istoric_melodii(istoric_melodii_id, utilizator_id, melodie_id, data_ascultare)
+values(3,3,5,to_date('10-10-2022','dd-mm-yyyy'));
+insert into istoric_melodii(istoric_melodii_id, utilizator_id, melodie_id, data_ascultare)
+values(4,4,7,to_date('04-12-2021','dd-mm-yyyy'));
+insert into istoric_melodii(istoric_melodii_id, utilizator_id, melodie_id, data_ascultare)
+values(5,5,10,to_date('09-12-2021','dd-mm-yyyy'));
+insert into istoric_melodii(istoric_melodii_id, utilizator_id, melodie_id, data_ascultare)
+values(6,6,12,to_date('31-12-2021','dd-mm-yyyy'));
+insert into istoric_melodii(istoric_melodii_id, utilizator_id, melodie_id, data_ascultare)
+values(7,7,14,to_date('28-01-2022','dd-mm-yyyy'));
+insert into istoric_melodii(istoric_melodii_id, utilizator_id, melodie_id, data_ascultare)
+values(8,8,15,to_date('28-02-2022','dd-mm-yyyy'));
+insert into istoric_melodii(istoric_melodii_id, utilizator_id, melodie_id, data_ascultare)
+values(9,9,16,to_date('04-06-2022','dd-mm-yyyy'));
+insert into istoric_melodii(istoric_melodii_id, utilizator_id, melodie_id, data_ascultare)
+values(10,10,21,to_date('14-08-2022','dd-mm-yyyy'));
+insert into istoric_melodii(istoric_melodii_id, utilizator_id, melodie_id, data_ascultare)
+values(11,11,26,to_date('04-12-2022','dd-mm-yyyy'));
+insert into istoric_melodii(istoric_melodii_id, utilizator_id, melodie_id, data_ascultare)
+values(12,1,14,to_date('04-12-2021','dd-mm-yyyy'));
+insert into istoric_melodii(istoric_melodii_id, utilizator_id, melodie_id, data_ascultare)
+values(13,7,15,to_date('04-12-2021','dd-mm-yyyy'));
+
+
+–tabelul PODCAST_ISTORIC:
+
+
+insert into podcast_istoric(podcast_istoric_id, utilizator_id, episod_id, data_ascultare)
+values(1,1,1,to_date('11-05-2023','dd-mm-yyyy'));
+insert into podcast_istoric(podcast_istoric_id, utilizator_id, episod_id, data_ascultare)
+values(2,1,2,to_date('14-05-2023','dd-mm-yyyy'));
+insert into podcast_istoric(podcast_istoric_id, utilizator_id, episod_id, data_ascultare)
+values(3,3,5,to_date('13-04-2023','dd-mm-yyyy'));
+insert into podcast_istoric(podcast_istoric_id, utilizator_id, episod_id, data_ascultare)
+values(4,4,4,to_date('04-12-2021','dd-mm-yyyy'));
+insert into podcast_istoric(podcast_istoric_id, utilizator_id, episod_id, data_ascultare)
+values(5,5,8,to_date('04-04-2020','dd-mm-yyyy'));
+insert into podcast_istoric(podcast_istoric_id, utilizator_id, episod_id, data_ascultare)
+values(6,6,10,to_date('19-10-2020','dd-mm-yyyy'));
+insert into podcast_istoric(podcast_istoric_id, utilizator_id, episod_id, data_ascultare)
+values(7,7,8,to_date('13-09-2020','dd-mm-yyyy'));
+insert into podcast_istoric(podcast_istoric_id, utilizator_id, episod_id, data_ascultare)
+values(8,8,9,to_date('13-04-2023','dd-mm-yyyy'));
+insert into podcast_istoric(podcast_istoric_id, utilizator_id, episod_id, data_ascultare)
+values(9,9,9,to_date('20-04-2023','dd-mm-yyyy'));
+insert into podcast_istoric(podcast_istoric_id, utilizator_id, episod_id, data_ascultare)
+values(10,10,12,to_date('13-03-2023','dd-mm-yyyy'));
+insert into podcast_istoric(podcast_istoric_id, utilizator_id, episod_id, data_ascultare)
+values(11, 11, 15,to_date('12-12-2020','dd-mm-yyyy'));
+
+
+--EXERCITIUL 6
+
+create or replace procedure GenerarePlaylistPersonalizat(
+    p_utilizator_id number )
+is
+    --declarare vector
+    type PlaylistType is varray(200) of varchar2(100);
+    
+    --declarare tabel indexat
+    type MelodieIndexType is table of melodie%rowtype index by pls_integer;
+    
+    --declarare tabel imbricat
+    type ArtistIdListaType is table of number;
+
+    --declarare variabile auxiliare
+    Playlist PlaylistType; --in vector vom tine melodiile pe care le vom afisa
+    MelodiiIndex MelodieIndexType; --in tab ind vom tine melodiile pe care le
+    --luam din albumele artistului/lor
+    ArtistIdLista ArtistIdListaType; --in tab imbr vom tine artistii pe care ii 
+    --prefera utilizatorul dat
+    
+    --alte variabile pt manipularea datelor
+    v_artist_id number; --id ul artistului pe care utilizatorul
+    --il urmareste
+    
+    v_album_id number; --variabila pt albumele artistului
+    
+    nr_albume_apreciate number;
+    nr_artisti_apreciati number;
+    nr_albume_artist number;
+    
+begin
+
+    select count(*) into nr_albume_apreciate
+    from utilizator_apreciaza_album
+    where utilizator_id = p_utilizator_id;
+    
+    if nr_albume_apreciate = 0  then
+        raise_application_error(-20001, 'Acest utilizator nu a apreciat niciun album');
+    end if;
+    
+    
+    select count(*) into nr_artisti_apreciati
+    from utilizator_urmareste_artist
+    where utilizator_id = p_utilizator_id;
+    
+    if nr_artisti_apreciati = 0 then
+        raise_application_error(-20002, 'Acest utilizator nu urmareste niciun artist');
+    end if;
+    
+    --initializarea vectorului
+    Playlist := PlaylistType();
+    --initializare tabel indexat
+    MelodiiIndex := MelodieIndexType();
+    --initializare tab imbricat
+    ArtistIdLista := ArtistIdListaType();
+    
+    --parcurgerea artistilor pe care utilizatorul
+    --ii urmareste pentru generarea playlistului
+    for artist_rec in (
+        select artist_id
+        from utilizator_urmareste_artist
+        where utilizator_id = p_utilizator_id)
+    loop --parcurgem toti artistii pe care utilizatorul ii urmareste
+        ArtistIdLista.extend;
+        ArtistIdLista(ArtistIdLista.last) := artist_rec.artist_id;
+        --extindem tab imbricat si adaugam id ul artistului
+        --pe ultima pozitie(cea cu care s a extins)
+        
+        --afisare mesaj de procesare a artistilor
+        --se vede orientativ, ce artisti urmareste utilizatorul
+        
+        dbms_output.put_line('Procesare artist id: ' || artist_rec.artist_id);
+    end loop;
+    
+    --iteram prin lista de artisti luata din tabelul
+    --utilizator urm artist si cautam albumele si melodiile
+    
+    for i in ArtistIdLista.first .. ArtistIdLista.last loop
+        v_artist_id := ArtistIdLista(i);
+    
+    
+        --in baza de date exista si artisti care au melodii dar nu au albume,
+        --melodiile lor apar doar in tabela melodii, deci acest loop nu ar gasi nicio melodie
+        --prin urmare tabelul indexat MelodiiIndex va fi gol, va cauza probleme daca nu verificam
+        --de aici aceasta situatie
+        
+        --o solutie ar fi sa facem un select ca pentru urmaririle utilizatorului
+        --insa nu ar ajuta in cazul in care un utilizator urmareste spre exemplu doi artisti
+        --dintre care unul nu are albume, s ar ridica eroarea desi daca unul din ei
+        --are albume ar trebui sa mearga
+        --pentru asta verificam mai jos daca colectia este goala inainte de a o pune in playlist
+        --cautam albumele artistului 
+        for album_rec in (
+            select album_id 
+            from album
+            where artist_id = v_artist_id)
+        loop
+            v_album_id := album_rec.album_id;
+            
+            --afisare ce album procesam aucm
+            dbms_output.put_line('Procesare album id: ' || v_album_id);
+        
+            --adaugarea melodiilor din albumele apreciate
+            --in tab ind (melodiiindex)
+            for melodie_album_rec in (
+                select * from melodie
+                where album_id = v_album_id)
+            loop
+                MelodiiIndex(MelodiiIndex.count + 1) := melodie_album_rec;
+            end loop;
+        end loop;
+    end loop;
+    
+    --afisam ca am terminat de trecut prin artisti/albume/melodii
+    dbms_output.put_line('S-a terminat procesarea informatiilor');
+    
+    if MelodiiIndex is not null and MelodiiIndex.count > 0 then
+        --adaugam melodiile in playlist (din tab ind in vect)
+        for i in MelodiiIndex.first .. MelodiiIndex.last
+        loop
+            Playlist.extend;
+            Playlist(Playlist.last) := MelodiiIndex(i).titlu;
+        end loop;
+    else
+        raise_application_error(-20003, 'Utilizatorul urmareste doar artisti fara albume lansate!');
+    end if;
+    --afisarea playlistului generat
+    dbms_output.new_line;
+    dbms_output.put_line('Playlist personalizat pentru utilizatorul ' 
+    || p_utilizator_id || ':');
+    for i in Playlist.first .. Playlist.last loop
+        dbms_output.put_line(i + 1 || '. ' || Playlist(i));
+    end loop;
+end GenerarePlaylistPersonalizat;
+/
+
+
+--EXERCITIUL 7
+
+
+create or replace procedure IdentificareUseriApreciazaArtisti(
+    varsta_start number,--numarul de start pt intervalul de varsta
+    varsta_final number) --numarul de final pt intervalul de varsta
+    
+is
+    --variabile
+    v_user_id number; --pt id urile utilizatorilor care apreciaza artistul 
+    gasit boolean := false; --sa vedem daca exista artisti cu varste in intervalul dat
+    --record pentru a retine id-ul, numele si varsta artistului
+    type info_artist is record( 
+        v_artist_id artist.artist_id%type,
+        v_artist_nume artist.nume%type,
+        v_varsta artist.varsta%type
+    );
+    
+    artist_rec info_artist; --declaram variabila de tipul recordului
+    
+    --cursor neparametrizat
+    cursor artist_cursor is
+        select artist_id, nume, varsta --luam id, nume si varsta
+        from artist --pentru artistul cu varsta in acest interval
+        where nvl(varsta,0) >= varsta_start and varsta<=varsta_final; 
+        --am folosit nvl ptc trupele au varsta null
+        --cautam artisti cu varstele cuprinse intre cele doua numere date
+    
+    --cursor parametrizat
+    cursor user_cursor(p_artist_id number) is
+        select distinct ua.utilizator_id --selectam utilizatorii distincti 
+        from utilizator_apreciaza_album ua --care au apreciat macar un album al artistului
+        join album a on ua.album_id = a.album_id
+        where a.artist_id = p_artist_id;
+    
+begin
+    --deschidem cursorul neparametrizat ca sa luam
+    --id ul artistului dat prin nume
+    open artist_cursor;
+    fetch artist_cursor into artist_rec;
+    if artist_cursor%FOUND then --verificam daca exista informatii in acest cursor
+        gasit := true;
+    end if;
+    
+    --daca gasit e false inseamna ca nu exista
+    if not gasit then
+        dbms_output.put_line('Nu exista artisti cu varstele cuprinse intre ' || varsta_start || ' si ' || varsta_final);
+        close artist_cursor;
+        return; --iesim din procedura ca nu are sens sa continuam
+    else
+    loop --daca exista, facem loop
+        fetch artist_cursor into artist_rec; --punem informatiile in record (id, nume, varsta)
+        exit when artist_cursor%notfound;
+        
+        --afisam numele artistilor cu varstele in intervalul asta
+        dbms_output.put_line('Artistul ' || artist_rec.v_artist_nume || ': ' || artist_rec.v_varsta || ' de ani');
+        
+        --deschidem cursorul parametrizat ca sa luam userii care 
+        --apreciaza macar un album de la artistul determinat de cursorul neparametrizat
+        open user_cursor(artist_rec.v_artist_id);
+        
+        --verificam daca artistul are album salvat de catre useri
+        fetch user_cursor into v_user_id; --id ul din cursor pastrat intr o variabila
+        if user_cursor%NOTFOUND then 
+            dbms_output.put_line('Artistul ' || artist_rec.v_artist_nume || ' nu are niciun album salvat de catre utilizatori');
+        else
+        --altfel afisam userii pe rand
+            dbms_output.put_line('Artistul e apreciat de:'); 
+            --afisam informatia determinata de cursor
+            dbms_output.put_line('Utilizatorul ' || v_user_id || ' '); --id ul utilizatorului din cursor
+            dbms_output.new_line;
+        end if;
+        close user_cursor;
+        gasit := true;
+    end loop;
+    close artist_cursor;
+    end if;
+    
+exception
+    when others then
+        dbms_output.put_line('A intervenit o eroare.');
+end IdentificareUseriApreciazaArtisti;
+/
+
+
+call identificareuseriapreciazaartisti(41,44);
+
+
+--EXERCITIUL 8
+
+create or replace function ObtineRecentAdaugate(
+    p_utilizator_id number
+) return sys_refcursor is
+    v_cursor sys_refcursor; --cursor dinamic pt datele din playlisturi
+    nr_utilizatori number; --pt a verifica daca userul exista
+    exceptie_utilizator_inexistent exception; --exceptii definite
+    exceptie_date_inexistente exception; --pt cand nu urmareste playlisturi
+begin
+
+
+    --verificam daca utilizatorul exista
+    select count(*) into nr_utilizatori
+    from utilizator
+    where utilizator_id = p_utilizator_id;
+    
+    
+    if nr_utilizatori = 0 then
+        raise exceptie_utilizator_inexistent;
+    end if;
+    
+    --combinam datele din tabele
+    open v_cursor for
+        with MelodiiRecentAdaugate as(
+            --selectam id ul si titlul melodiilor recent adaugate in playlisturile
+            --urmarite de utilizatorul specificat
+            select m.melodie_id, m.titlu
+            from melodie m
+            join melodie_in_playlist_utilizator mp on m.melodie_id = mp.melodie_id
+            join utilizator_apreciaza_playlist up on mp.playlist_id = up.playlist_id
+            where up.utilizator_id = p_utilizator_id
+            order by mp.data_adaugare desc
+        )
+        
+        --luam doar ultimele 10 melodii adaugate(cele mai recente 10)
+        select * from MelodiiRecentAdaugate
+        where rownum <=10;
+        
+        
+    --verificam daca s au gasit melodii (Daca utilizatorul 
+    --a apreciat vreun playlist)
+    select count(*) into nr_utilizatori
+    from utilizator_apreciaza_playlist
+    where utilizator_id = p_utilizator_id;
+    
+    if nr_utilizatori = 0 then
+        raise exceptie_date_inexistente;
+    end if;
+        
+    --returnam cursorul inainte de blocul de exceptii
+    return v_cursor;
+exception
+    --in blocul de exceptii vom returna cursorul cu null pentru cele doua informatii
+    --deoarece inainte de acest bloc noi returnam cursorul, insa daca
+    --a intervenit vreo eroare, cele doua campuri nu au date consistente/bune
+    --deci trebuie sa le returnam ca fiind nule
+    when exceptie_utilizator_inexistent then
+        dbms_output.put_line('Acest utilizator nu exista!');
+        --returnam cursorul gol 
+        open v_cursor for select null as melodie_id, null as titlu from dual;
+        return v_cursor;
+    when exceptie_date_inexistente then
+        dbms_output.put_line('Nu exista date disponibile pentru acest utilizator');
+        --returnam cursorul gol
+        open v_cursor for select null as melodie_id, null as titlu from dual;
+        return v_cursor;
+    when others then
+        dbms_output.put_line('A aparut o alta eroare!');
+        --returnam cursorul gol
+        open v_cursor for select null as melodie_id, null as titlu from dual;
+    return v_cursor;
+end ObtineRecentAdaugate;
+/
+
+
+
+--apelare program
+declare
+  --declarare variabila cursor
+  v_cursor sys_refcursor;
+
+  --declarare variabile pt fiecare coloana din cursor
+  v_melodie_id melodie.melodie_id%type;
+  v_titlu melodie.titlu%type;
+
+begin
+  --apelare functie pentru a obtine cursorul
+  v_cursor := ObtineRecentAdaugate(1); 
+
+  --loop pentru a lua info din cursor
+  loop
+    --fetch din cursor in fiecare variabila
+    fetch v_cursor into v_melodie_id, v_titlu;
+
+    --iesim cand cursorul nu mai are date
+    exit when v_cursor%NOTFOUND;
+
+    --afisare informatii despre melodii
+    if v_melodie_id is not null then
+     dbms_output.put_line('Melodie ID: ' || v_melodie_id || ', Titlu: ' || v_titlu);
+    end if;
+  end loop;
+
+  --inchidem cursorul
+  close v_cursor;
+
+end;
+/
+
+
+--EXERCITIUL 9
+
+create or replace procedure InfoAlbum(
+    p_username varchar2
+) is
+    nr_albume number;
+    nr_utilizatori number;
+    exceptie_nume1 exception;
+    exceptie_invalid_input exception;
+    exceptie_user_inexistent exception;
+    exceptie_no_album exception;
+begin
+
+    --VERIFICARI PENTRU EXCEPTII
+    --verificam ca username ul dat sa fie un sir de caractere valid
+    if p_username is null or trim(p_username) = '' then
+        --aruncam exceptie pt nume
+        raise exceptie_nume1;
+        --raise_application_error(-20001, 'Numele utilizatorului nu poate fi null sau gol');
+    end if;
+    
+    --verificam daca utilizatorul exista
+    select count(*) into nr_utilizatori from utilizator where nume_utilizator = p_username;
+    if nr_utilizatori = 0 then
+        --ridicam exc ca nu exista utilizator cu numele asta
+        raise exceptie_user_inexistent;
+    elsif nr_utilizatori >1 then --sau daca sunt mai multi cu acelasi nume de utilizator
+        raise too_many_rows;
+    end if;
+    
+    --verificam daca utilizatorul are albume apreciate
+    select count(1) into nr_albume
+    from utilizator u 
+    join utilizator_Apreciaza_album ua on u.utilizator_id = ua.utilizator_id
+    where u.nume_utilizator = p_username;
+    
+    if nr_albume = 0 then
+        raise exceptie_no_album;
+    end if;
+    
+    for album_rec in (
+        select
+            a.album_id,
+            ar.nume as artist_nume,
+            a.titlu,
+            (
+                select m.titlu
+                from melodie m
+                where m.album_id = a.album_id
+                order by m.data_lansare desc
+                fetch first 1 row only
+            ) as ultima_melodie
+        from utilizator u
+        join utilizator_apreciaza_album ua ON u.utilizator_id = ua.utilizator_id
+        join album a on ua.album_id = a.album_id
+        join artist ar on a.artist_id = ar.artist_id
+        where u.nume_utilizator = p_username
+    )
+    loop
+       dbms_output.put_line('Album ID: ' || album_rec.album_id || 
+                             ', Artist: ' || album_rec.artist_nume ||
+                             ', Title: ' || album_rec.titlu ||
+                             ', Ultima Melodie: ' || NVL(album_rec.ultima_melodie, 'N/A'));
+    end loop;
+    
+exception
+    when exceptie_nume1 then
+        dbms_output.put_line('Numele utilizatorului nu poate fi null sau gol');
+    when exceptie_user_inexistent then
+        dbms_output.put_line('Utilizatorul "' || p_username || '" nu exista.');
+    when exceptie_no_album then
+        dbms_output.put_line('Utilizatorul "' || p_username || '" nu a apreciat niciun album');
+--    when no_data_found then --aici nu va intra ptc tratez exceptia inainte de for cu count pt exceptie_no_Album 
+--iar pentru utilizator inexistent am tratat separat deci exceptia no_Data_found a fost impartita in doua exceptii separate
+--pentru a vedea exact de unde vine
+    when too_many_rows then
+        dbms_output.put_line('Exista mai multi utilizatori cu usernameul "' || p_username ||'"');
+    when value_Error then
+        raise_application_error(-20003, 'Input invalid!');
+    when others then
+        --orice alta exceptie
+        --raise_application_error(-20004, 'O alta eroare s-a produs!');
+        dbms_output.put_line('Eroare: ' || SQLERRM);
+end InfoAlbum;
+/
+
+call infoalbum('vlonefour');
+
+
+--EXERCITIUL 10
+
+
+create or replace  trigger trig_mentenanta_ex10
+before insert or update or delete on istoric_melodii
+declare
+    ziua_curenta number;
+    ora_curenta number;
+begin
+    --vedem care e ziua si ora curenta
+    select to_number(to_char(sysdate, 'D')), to_number(to_char(sysdate, 'HH24'))
+    into ziua_curenta, ora_curenta
+    from dual;
+
+    --restrictionam operatiile  in fiecare vineri intre 19 si 20
+    --zilele sunt numerotate de la 1 la 7 incepand cu 1 = duminica
+    if ziua_curenta = 6 and ora_curenta between 19 and 20 --6 e vineri
+    then
+        if inserting then
+            raise_application_error(-20001, 'Inserarea in tabelul "istoric_melodii" nu este permisa in timpul mentenantei aplicatiei!');
+        elsif deleting then
+            raise_application_error(-20002, 'Stergerea din tabelul "istoric_melodii" nu este permisa in timpul programului de mentenanta!');
+        else --updating
+            raise_application_error(-20003, 'Actualizarile nu sunt permise in tabelul "istoric_melodii" nu este permisa in timpul mentenantei!');
+        end if;
+    end if;
+end;
+
+
+--EXERCITIUL 11
+
+
+create or replace view utilizatori_playlists as
+select
+    ua.playlist_id, ua.utilizator_id, u.nume_utilizator, p.titlu as Titlu_Playlist,
+    count(mp.melodie_id) as Numar_Melodii
+from utilizator_apreciaza_playlist ua
+join utilizator u on ua.utilizator_id = u.utilizator_id
+join playlist p on ua.playlist_id = p.playlist_id
+left join melodie_in_playlist_utilizator mp on p.playlist_id = mp.playlist_id
+group by ua.playlist_id, ua.utilizator_id, u.nume_utilizator, p.titlu;
+
+create or replace trigger actualizeaza_utilizatori_playlists
+instead of insert or delete or update
+on utilizatori_playlists
+for each row
+begin
+    if inserting then
+        --adaugare apreciere pentru un playlist de catre un user
+        insert into utilizator_apreciaza_playlist(playlist_id, utilizator_id)
+        values(:NEW.playlist_id, :NEW.utilizator_id);
+    
+    elsif deleting then
+        --stergere apreciere de catre useru dat pentru playlistul dat
+        delete from utilizator_apreciaza_playlist
+        where playlist_id = :OLD.playlist_id and utilizator_id = :OLD.utilizator_id;
+        
+    elsif updating then
+        --actualizare inregistrare 
+        update utilizator_apreciaza_playlist
+        set playlist_id = :NEW.playlist_id,
+            utilizator_id = :NEW.utilizator_id
+        where playlist_id = :OLD.playlist_id and utilizator_id = :OLD.utilizator_id;
+    end if;
+end;
+/
+
+
+--EXERCITIUL 12
+
+create table ldd_trig_log_ex12 (
+    log_id number primary key,
+    log_timestamp timestamp,
+    username varchar2(30),
+    tip_eveniment varchar2(50),
+    tip_obiect varchar2(30),
+    nume_obiect varchar2(100)
+);
+
+create sequence ldd_trig_log_ex12_secv start with 1 increment by 1 nocache;
+
+create or replace trigger ldd_audit_trigger
+after create or alter or drop on schema
+declare
+    v_tip_eveniment varchar2(50);
+    v_tip_obiect varchar2(30);
+    v_nume_obiect varchar2(100);
+    v_username varchar2(30);
+    v_log_id number;
+begin
+    v_tip_eveniment := case
+        when ora_sysevent = 'CREATE' then 'CREATE'
+        when ora_sysevent = 'ALTER' then 'ALTER'
+        when ora_sysevent = 'DROP' then 'DROP'
+    end;
+
+    v_tip_obiect := ora_dict_obj_type;
+    v_nume_obiect := ora_dict_obj_name;
+    v_username := sys.login_user;
+
+    -- Fetch the next value from the sequence
+    select ldd_trig_log_ex12_secv.nextval into v_log_id from dual;
+
+    insert into ldd_trig_log_ex12 (log_id, log_timestamp, username, tip_eveniment, tip_obiect, nume_obiect)
+    values (v_log_id, systimestamp, v_username, v_tip_eveniment, v_tip_obiect, v_nume_obiect);
+end;
+/
+select * from ldd_trig_log_ex12;
+
+
+--create
+create table ExempluTabel (
+    id number,
+    Nume varchar(50)
+);
+
+
+--alter
+alter table ExempluTabel
+add Prenume varchar2(50);
+
+select * from ldd_trig_log_ex12;
+
+--Drop
+drop table ExempluTabel;
+
+
+--EXERCITIUL 13
+
+create or replace package pachet_13 as
+
+    --ex 6
+    procedure GenerarePlaylistPersonalizat(p_utilizator_id number );
+    
+    --ex 7
+    procedure IdentificareUseriApreciazaArtisti(varsta_start number, varsta_final number);
+
+    --ex 8 
+    function ObtineRecentAdaugate(p_utilizator_id number) return sys_refcursor;
+    
+    --ex 9
+    procedure InfoAlbum(p_username varchar2);
+end pachet_13;
+/
+
+create or replace package body pachet_13 
+is
+-----------------------------------------------------
+
+    --ex 6
+        procedure GenerarePlaylistPersonalizat(
+        p_utilizator_id number )
+    is
+        --declarare vector
+        type PlaylistType is varray(200) of varchar2(100);
+        
+        --declarare tabel indexat
+        type MelodieIndexType is table of melodie%rowtype index by pls_integer;
+        
+        --declarare tabel imbricat
+        type ArtistIdListaType is table of number;
+    
+        --declarare variabile auxiliare
+        Playlist PlaylistType; --in vector vom tine melodiile pe care le vom afisa
+        MelodiiIndex MelodieIndexType; --in tab ind vom tine melodiile pe care le
+        --luam din albumele artistului/lor
+        ArtistIdLista ArtistIdListaType; --in tab imbr vom tine artistii pe care ii 
+        --prefera utilizatorul dat
+        
+        --alte variabile pt manipularea datelor
+        v_artist_id number; --id ul artistului pe care utilizatorul
+        --il urmareste
+        
+        v_album_id number; --variabila pt albumele artistului
+        
+        nr_albume_apreciate number;
+        nr_artisti_apreciati number;
+        nr_albume_artist number;
+        
+    begin
+    
+        select count(*) into nr_albume_apreciate
+        from utilizator_apreciaza_album
+        where utilizator_id = p_utilizator_id;
+        
+        if nr_albume_apreciate = 0  then
+            raise_application_error(-20001, 'Acest utilizator nu a apreciat niciun album');
+        end if;
+        
+        
+        select count(*) into nr_artisti_apreciati
+        from utilizator_urmareste_artist
+        where utilizator_id = p_utilizator_id;
+        
+        if nr_artisti_apreciati = 0 then
+            raise_application_error(-20002, 'Acest utilizator nu urmareste niciun artist');
+        end if;
+        
+        --initializarea vectorului
+        Playlist := PlaylistType();
+        --initializare tabel indexat
+        MelodiiIndex := MelodieIndexType();
+        --initializare tab imbricat
+        ArtistIdLista := ArtistIdListaType();
+        
+        --parcurgerea artistilor pe care utilizatorul
+        --ii urmareste pentru generarea playlistului
+        for artist_rec in (
+            select artist_id
+            from utilizator_urmareste_artist
+            where utilizator_id = p_utilizator_id)
+        loop --parcurgem toti artistii pe care utilizatorul ii urmareste
+            ArtistIdLista.extend;
+            ArtistIdLista(ArtistIdLista.last) := artist_rec.artist_id;
+            --extindem tab imbricat si adaugam id ul artistului
+            --pe ultima pozitie(cea cu care s a extins)
+            
+            --afisare mesaj de procesare a artistilor
+            --se vede orientativ, ce artisti urmareste utilizatorul
+            
+            dbms_output.put_line('Procesare artist id: ' || artist_rec.artist_id);
+        end loop;
+        
+        --iteram prin lista de artisti luata din tabelul
+        --utilizator urm artist si cautam albumele si melodiile
+        
+        for i in ArtistIdLista.first .. ArtistIdLista.last loop
+            v_artist_id := ArtistIdLista(i);
+        
+        
+            --in baza de date exista si artisti care au melodii dar nu au albume,
+            --melodiile lor apar doar in tabela melodii, deci acest loop nu ar gasi nicio melodie
+            --prin urmare tabelul indexat MelodiiIndex va fi gol, va cauza probleme daca nu verificam
+            --de aici aceasta situatie
+            
+            --o solutie ar fi sa facem un select ca pentru urmaririle utilizatorului
+            --insa nu ar ajuta in cazul in care un utilizator urmareste spre exemplu doi artisti
+            --dintre care unul nu are albume, s ar ridica eroarea desi daca unul din ei
+            --are albume ar trebui sa mearga
+            --pentru asta verificam mai jos daca colectia este goala inainte de a o pune in playlist
+            --cautam albumele artistului 
+            for album_rec in (
+                select album_id 
+                from album
+                where artist_id = v_artist_id)
+            loop
+                v_album_id := album_rec.album_id;
+                
+                --afisare ce album procesam aucm
+                dbms_output.put_line('Procesare album id: ' || v_album_id);
+            
+                --adaugarea melodiilor din albumele apreciate
+                --in tab ind (melodiiindex)
+                for melodie_album_rec in (
+                    select * from melodie
+                    where album_id = v_album_id)
+                loop
+                    MelodiiIndex(MelodiiIndex.count + 1) := melodie_album_rec;
+                end loop;
+            end loop;
+        end loop;
+        
+        --afisam ca am terminat de trecut prin artisti/albume/melodii
+        dbms_output.put_line('S-a terminat procesarea informatiilor');
+        
+        if MelodiiIndex is not null and MelodiiIndex.count > 0 then
+            --adaugam melodiile in playlist (din tab ind in vect)
+            for i in MelodiiIndex.first .. MelodiiIndex.last
+            loop
+                Playlist.extend;
+                Playlist(Playlist.last) := MelodiiIndex(i).titlu;
+            end loop;
+        else
+            raise_application_error(-20003, 'Utilizatorul urmareste doar artisti fara albume lansate!');
+        end if;
+        --afisarea playlistului generat
+        dbms_output.new_line;
+        dbms_output.put_line('Playlist personalizat pentru utilizatorul ' 
+        || p_utilizator_id || ':');
+        for i in Playlist.first .. Playlist.last loop
+            dbms_output.put_line(i + 1 || '. ' || Playlist(i));
+        end loop;
+    end GenerarePlaylistPersonalizat;
+
+
+---------------------------------------------------
+
+    --ex 7
+        procedure IdentificareUseriApreciazaArtisti(
+        varsta_start number,--numarul de start pt intervalul de varsta
+        varsta_final number) --numarul de final pt intervalul de varsta
+        
+    is
+        --variabile
+        v_user_id number; --pt id urile utilizatorilor care apreciaza artistul 
+        gasit boolean := false; --sa vedem daca exista artisti cu varste in intervalul dat
+        --record pentru a retine id-ul, numele si varsta artistului
+        type info_artist is record( 
+            v_artist_id artist.artist_id%type,
+            v_artist_nume artist.nume%type,
+            v_varsta artist.varsta%type
+        );
+        
+        artist_rec info_artist; --declaram variabila de tipul recordului
+        
+        --cursor neparametrizat
+        cursor artist_cursor is
+            select artist_id, nume, varsta --luam id, nume si varsta
+            from artist --pentru artistul cu varsta in acest interval
+            where nvl(varsta,0) >= varsta_start and varsta<=varsta_final; 
+            --am folosit nvl ptc trupele au varsta null
+            --cautam artisti cu varstele cuprinse intre cele doua numere date
+        
+        --cursor parametrizat
+        cursor user_cursor(p_artist_id number) is
+            select distinct ua.utilizator_id --selectam utilizatorii distincti 
+            from utilizator_apreciaza_album ua --care au apreciat macar un album al artistului
+            join album a on ua.album_id = a.album_id
+            where a.artist_id = p_artist_id;
+        
+    begin
+        --deschidem cursorul neparametrizat ca sa luam
+        --id ul artistului dat prin nume
+        open artist_cursor;
+        fetch artist_cursor into artist_rec;
+        if artist_cursor%FOUND then --verificam daca exista informatii in acest cursor
+            gasit := true;
+        end if;
+        
+        --daca gasit e false inseamna ca nu exista
+        if not gasit then
+            dbms_output.put_line('Nu exista artisti cu varstele cuprinse intre ' || varsta_start || ' si ' || varsta_final);
+            close artist_cursor;
+            return; --iesim din procedura ca nu are sens sa continuam
+        else
+        loop --daca exista, facem loop
+            fetch artist_cursor into artist_rec; --punem informatiile in record (id, nume, varsta)
+            exit when artist_cursor%notfound;
+            
+            --afisam numele artistilor cu varstele in intervalul asta
+            dbms_output.put_line('Artistul ' || artist_rec.v_artist_nume || ': ' || artist_rec.v_varsta || ' de ani');
+            
+            --deschidem cursorul parametrizat ca sa luam userii care 
+            --apreciaza macar un album de la artistul determinat de cursorul neparametrizat
+            open user_cursor(artist_rec.v_artist_id);
+            
+            --verificam daca artistul are album salvat de catre useri
+            fetch user_cursor into v_user_id; --id ul din cursor pastrat intr o variabila
+            if user_cursor%NOTFOUND then 
+                dbms_output.put_line('Artistul ' || artist_rec.v_artist_nume || ' nu are niciun album salvat de catre utilizatori');
+            else
+            --altfel afisam userii pe rand
+                dbms_output.put_line('Artistul e apreciat de:'); 
+                --afisam informatia determinata de cursor
+                dbms_output.put_line('Utilizatorul ' || v_user_id || ' '); --id ul utilizatorului din cursor
+                dbms_output.new_line;
+            end if;
+            close user_cursor;
+            gasit := true;
+        end loop;
+        close artist_cursor;
+        end if;
+        
+    exception
+        when others then
+            dbms_output.put_line('A intervenit o eroare.');
+    end IdentificareUseriApreciazaArtisti;
+
+    
+-------------------------------------------------------
+
+    --ex 8
+        function ObtineRecentAdaugate(
+        p_utilizator_id number
+    ) return sys_refcursor is
+        v_cursor sys_refcursor; --cursor dinamic pt datele din playlisturi
+        nr_utilizatori number; --pt a verifica daca userul exista
+        exceptie_utilizator_inexistent exception; --exceptii definite
+        exceptie_date_inexistente exception; --pt cand nu urmareste playlisturi
+    begin
+    
+    
+        --verificam daca utilizatorul exista
+        select count(*) into nr_utilizatori
+        from utilizator
+        where utilizator_id = p_utilizator_id;
+        
+        
+        if nr_utilizatori = 0 then
+            raise exceptie_utilizator_inexistent;
+        end if;
+        
+        --combinam datele din tabele
+        open v_cursor for
+            with MelodiiRecentAdaugate as(
+                --selectam id ul si titlul melodiilor recent adaugate in playlisturile
+                --urmarite de utilizatorul specificat
+                select m.melodie_id, m.titlu
+                from melodie m
+                join melodie_in_playlist_utilizator mp on m.melodie_id = mp.melodie_id
+                join utilizator_apreciaza_playlist up on mp.playlist_id = up.playlist_id
+                where up.utilizator_id = p_utilizator_id
+                order by mp.data_adaugare desc
+            )
+            
+            --luam doar ultimele 10 melodii adaugate(cele mai recente 10)
+            select * from MelodiiRecentAdaugate
+            where rownum <=10;
+            
+            
+        --verificam daca s au gasit melodii (Daca utilizatorul 
+        --a apreciat vreun playlist)
+        select count(*) into nr_utilizatori
+        from utilizator_apreciaza_playlist
+        where utilizator_id = p_utilizator_id;
+        
+        if nr_utilizatori = 0 then
+            raise exceptie_date_inexistente;
+        end if;
+            
+        --returnam cursorul inainte de blocul de exceptii
+        return v_cursor;
+    exception
+        --in blocul de exceptii vom returna cursorul cu null pentru cele doua informatii
+        --deoarece inainte de acest bloc noi returnam cursorul, insa daca
+        --a intervenit vreo eroare, cele doua campuri nu au date consistente/bune
+        --deci trebuie sa le returnam ca fiind nule
+        when exceptie_utilizator_inexistent then
+            dbms_output.put_line('Acest utilizator nu exista!');
+            --returnam cursorul gol 
+            open v_cursor for select null as melodie_id, null as titlu from dual;
+            return v_cursor;
+        when exceptie_date_inexistente then
+            dbms_output.put_line('Nu exista date disponibile pentru acest utilizator');
+            --returnam cursorul gol
+            open v_cursor for select null as melodie_id, null as titlu from dual;
+            return v_cursor;
+        when others then
+            dbms_output.put_line('A aparut o alta eroare!');
+            --returnam cursorul gol
+            open v_cursor for select null as melodie_id, null as titlu from dual;
+        return v_cursor;
+    end ObtineRecentAdaugate;
+
+
+
+---------------------------------------------------------
+
+    --ex 9
+        procedure InfoAlbum(
+        p_username varchar2
+    ) is
+        nr_albume number;
+        nr_utilizatori number;
+        exceptie_nume1 exception;
+        exceptie_invalid_input exception;
+        exceptie_user_inexistent exception;
+        exceptie_no_album exception;
+    begin
+    
+        --VERIFICARI PENTRU EXCEPTII
+        --verificam ca username ul dat sa fie un sir de caractere valid
+        if p_username is null or trim(p_username) = '' then
+            --aruncam exceptie pt nume
+            raise exceptie_nume1;
+            --raise_application_error(-20001, 'Numele utilizatorului nu poate fi null sau gol');
+        end if;
+        
+        --verificam daca utilizatorul exista
+        select count(*) into nr_utilizatori from utilizator where nume_utilizator = p_username;
+        if nr_utilizatori = 0 then
+            --ridicam exc ca nu exista utilizator cu numele asta
+            raise exceptie_user_inexistent;
+        elsif nr_utilizatori >1 then --sau daca sunt mai multi cu acelasi nume de utilizator
+            raise too_many_rows;
+        end if;
+        
+        --verificam daca utilizatorul are albume apreciate
+        select count(1) into nr_albume
+        from utilizator u 
+        join utilizator_Apreciaza_album ua on u.utilizator_id = ua.utilizator_id
+        where u.nume_utilizator = p_username;
+        
+        if nr_albume = 0 then
+            raise exceptie_no_album;
+        end if;
+        
+        for album_rec in (
+            select
+                a.album_id,
+                ar.nume as artist_nume,
+                a.titlu,
+                (
+                    select m.titlu
+                    from melodie m
+                    where m.album_id = a.album_id
+                    order by m.data_lansare desc
+                    fetch first 1 row only
+                ) as ultima_melodie
+            from utilizator u
+            join utilizator_apreciaza_album ua ON u.utilizator_id = ua.utilizator_id
+            join album a on ua.album_id = a.album_id
+            join artist ar on a.artist_id = ar.artist_id
+            where u.nume_utilizator = p_username
+        )
+        loop
+           dbms_output.put_line('Album ID: ' || album_rec.album_id || 
+                                 ', Artist: ' || album_rec.artist_nume ||
+                                 ', Title: ' || album_rec.titlu ||
+                                 ', Ultima Melodie: ' || NVL(album_rec.ultima_melodie, 'N/A'));
+        end loop;
+        
+    exception
+        when exceptie_nume1 then
+            dbms_output.put_line('Numele utilizatorului nu poate fi null sau gol');
+        when exceptie_user_inexistent then
+            dbms_output.put_line('Utilizatorul "' || p_username || '" nu exista.');
+        when exceptie_no_album then
+            dbms_output.put_line('Utilizatorul "' || p_username || '" nu a apreciat niciun album');
+    --    when no_data_found then --aici nu va intra ptc tratez exceptia inainte de for cu count pt exceptie_no_Album 
+    --iar pentru utilizator inexistent am tratat separat deci exceptia no_Data_found a fost impartita in doua exceptii separate
+    --pentru a vedea exact de unde vine
+        when too_many_rows then
+            dbms_output.put_line('Exista mai multi utilizatori cu usernameul "' || p_username ||'"');
+        when value_Error then
+            raise_application_error(-20003, 'Input invalid!');
+        when others then
+            --orice alta exceptie
+            --raise_application_error(-20004, 'O alta eroare s-a produs!');
+            dbms_output.put_line('Eroare: ' || SQLERRM);
+    end InfoAlbum;
+
+
+end pachet_13;
+/
+
+--apelare exercitiul 6
+call pachet_13.generareplaylistpersonalizat(1);
+
+--apel exercitiul 7
+call pachet_13.identificareuseriapreciazaartisti(41,44);
+
+--apel exercitiul 8
+declare 
+    --declarare variabile pt fiecare coloana din cursor
+    v_melodie_id melodie.melodie_id%type;
+    v_titlu melodie.titlu%type;
+    v_cursor sys_refcursor;
+begin
+    v_cursor := pachet_13.ObtineRecentAdaugate(1); 
+    --loop pentru a lua info din cursor
+  loop
+    --fetch din cursor in fiecare variabila
+    fetch v_cursor into v_melodie_id, v_titlu;
+    --iesim cand cursorul nu mai are date
+    exit when v_cursor%NOTFOUND;
+    --afisare informatii despre melodii
+    if v_melodie_id is not null then
+     dbms_output.put_line('Melodie ID: ' || v_melodie_id || ', Titlu: ' || v_titlu);
+    end if;
+  end loop;
+  --inchidem cursorul
+  close v_cursor;
+end;
+/
+--apel exercitiul 9
+call pachet_13.infoalbum('mara133');
+
+
+--EXERCITIUL 14
+
+
+--SPECIFICATII PACHET
+create or replace package pachet_muzica_14 as
+    --tipuri de date
+    type TipArtist is record (
+        artist_id artist.artist_id%Type,
+        nume artist.nume%type,
+        varsta artist.varsta%type,
+        descriere artist.descriere%Type
+    );
+    
+    type TipAlbum is record (
+        album_id album.album_id%Type,
+        gen album.gen%type,
+        pret album.pret%Type,
+        data_lansare album.data_lansare%Type,
+        artist_id album.artist_id%type,
+        titlu album.titlu%type
+    );
+    
+    type TipPlaylist is record (
+        playlist_id playlist.playlist_id%Type,
+        titlu playlist.titlu%type,
+        data_creare playlist.data_creare%type
+    );
+    
+    type TipMelodie is record(
+        melodie_id melodie.melodie_id%type,
+        titlu melodie.titlu%type,
+        descriere melodie.descriere%Type,
+        durata melodie.durata%Type,
+        data_lansare melodie.data_lansare%Type,
+        album_id melodie.album_id%type,
+        artist_id melodie.artist_id%Type
+    );
+    
+    type TipUtilizator is record(
+        utilizator_id utilizator.utilizator_id%Type,
+        nume_utilizator utilizator.nume_utilizator%Type,
+        parola utilizator.parola%Type,
+        email utilizator.email%type, 
+        data_nastere utilizator.data_nastere%Type,
+        tara utilizator.tara%Type
+    );
+    
+    --    --functii
+    function ObtineInfoArtist(p_artist_id in artist.artist_id%type) return TipArtist;
+    function ObtineInfoAlbum(p_album_id in album.album_id%type) return TipAlbum;
+    function ObtineInfoPlaylist(p_playlist_id in playlist.playlist_id%type) return TipPlaylist;
+    function ObtineInfoMelodie(p_melodie_id in melodie.melodie_id%type) return TipMelodie;
+    function ObtineInfoUtilizator(p_utilizator_id in utilizator.utilizator_id%type) return TipUtilizator;
+    
+    
+    
+    --proceduri
+    procedure CreareArtist(
+        p_artist_id artist.artist_id%Type,
+        p_nume artist.nume%type,
+        p_varsta artist.varsta%type,
+        p_descriere artist.descriere%Type
+    );
+        
+    procedure CreareAlbum(
+        p_album_id album.album_id%Type,
+        p_gen album.gen%type,
+        p_pret album.pret%Type,
+        p_data_lansare album.data_lansare%Type,
+        p_artist_id album.artist_id%type,
+        p_titlu album.titlu%type
+    );
+    
+    
+    procedure CrearePlaylist(
+        p_playlist_id playlist.playlist_id%Type,
+        p_titlu playlist.titlu%type,
+        p_data_creare playlist.data_creare%type
+    );
+    
+    
+    procedure CreareMelodie(
+        p_melodie_id melodie.melodie_id%type,
+        p_titlu melodie.titlu%type,
+        p_descriere melodie.descriere%Type,
+        p_durata melodie.durata%Type,
+        p_data_lansare melodie.data_lansare%Type,
+        p_album_id melodie.album_id%type,
+        p_artist_id melodie.artist_id%Type
+    );
+    
+    
+    procedure CreareUtilizator(
+        p_utilizator_id utilizator.utilizator_id%Type,
+        p_nume_utilizator utilizator.nume_utilizator%Type,
+        p_parola utilizator.parola%Type,
+        p_email utilizator.email%type, 
+        p_data_nastere utilizator.data_nastere%Type,
+        p_tara utilizator.tara%Type
+    );
+    
+
+end pachet_muzica_14;
+/
+
+
+--CORP PACHET
+
+create or replace package body pachet_muzica_14 as
+    
+    
+    --IMPLEMENTARE FUNCTII
+    
+    function ObtineInfoArtist(p_artist_id in artist.artist_id%type) return TipArtist is
+        v_artist_info TipArtist;
+    begin
+        select artist_id, nume, varsta, descriere
+        into v_artist_info
+        from artist
+        where artist_id = p_artist_id;
+
+        return v_artist_info;
+    exception
+        when no_data_found then
+            dbms_output.put_line('Nu exista artist cu acest id!');
+        --too many rows nu poate fi deoarece artist_id e cheie primara
+        when others then
+            dbms_output.put_line('A intervenit o eroare!');
+    end ObtineInfoArtist;
+    
+    
+    function ObtineInfoAlbum(p_album_id in album.album_id%type) return TipAlbum is
+        v_album_info TipAlbum;
+    begin
+        select album_id, gen, pret, data_lansare, artist_id, titlu
+        into v_album_info
+        from album
+        where album_id = p_album_id;
+        
+        return v_album_info;
+        
+    exception 
+        when no_data_found then
+            dbms_output.put_line('Nu exista niciun album cu acest id!');
+        --too_many_rows nu poate fi declansata deoarece id-ul e cheie primara
+        when others then
+            dbms_output.put_line('A intervenit o eroare!');
+    end ObtineInfoAlbum;
+
+
+    function ObtineInfoPlaylist(p_playlist_id in playlist.playlist_id%type) return TipPlaylist is
+        v_playlist_info TipPlaylist;
+    begin
+        select playlist_id, titlu, data_creare
+        into v_playlist_info
+        from playlist
+        where playlist_id = p_playlist_id;
+        
+        return v_playlist_info;
+        
+    exception 
+        when no_data_found then
+            dbms_output.put_line('Nu exista playlist cu acest id!');
+        --too many rows nu se declanseaza id-cheie primara
+        when others then
+            dbms_output.put_line('A intervenit o eroare!');
+    end ObtineInfoPlaylist;
+    
+    
+    function ObtineInfoMelodie(p_melodie_id in melodie.melodie_id%type) return TipMelodie is
+        v_melodie_info TipMelodie;
+    begin
+        select melodie_id, titlu, descriere, durata, data_lansare, album_id, artist_id
+        into v_melodie_info
+        from melodie
+        where melodie_id = p_melodie_id;
+        
+        return v_melodie_info;
+    
+    exception 
+        when no_data_found then
+            dbms_output.put_line('Nu exista melodie cu acest id!');
+        -- too many rows nu exista - id e cheie primara
+        when others then
+            dbms_output.put_line('A intervenit o eroare!');
+    end ObtineInfoMelodie;
+    
+    
+    function ObtineInfoUtilizator(p_utilizator_id in utilizator.utilizator_id%type) return TipUtilizator is
+        v_utilizator_info TipUtilizator;
+    begin
+        select utilizator_id, nume_utilizator, parola, email, data_nastere,tara
+        into v_utilizator_info
+        from utilizator
+        where utilizator_id = p_utilizator_id;
+
+        return v_utilizator_info;
+    
+    exception
+        when no_data_found then
+            dbms_output.put_line('Nu exista utilizator cu acest id!');
+        --too many nu se poate id=cheie externa
+        when others then
+            dbms_output.put_line('A intervenit o eroare!');
+    end ObtineInfoUtilizator;
+    
+    
+    --implementare proceduri
+    
+    procedure CreareArtist(
+        p_artist_id artist.artist_id%type,
+        p_nume artist.nume%type,
+        p_varsta artist.varsta%type,
+        p_descriere artist.descriere%type
+    ) is
+        v_artist_info pachet_muzica_14.TipArtist;
+    begin
+    
+        --verificari integritate date
+        if p_artist_id <=0 or p_artist_id is null then
+            dbms_output.put_line('Atentie: Id-ul trebuie sa fie un numar pozitiv si nu poate fi null!');
+            return; --iesim din procedura
+        end if;
+        
+        if p_nume is null or trim(p_nume) = '' then
+            dbms_output.put_line('Atentie: Numele nu poate fi gol sau null!');
+            return; --iesim din procedura
+        end if;
+        
+        if p_varsta <=0 then 
+            dbms_output.put_line('Atentie: Varsta nu poate fi un numar negativ sau 0!');
+            return; --iesim din proc
+        end if;
+        
+        --descrierea poate fi goala
+        --daca a trecut toate validarile, ajunge la insert
+        
+        insert into artist(artist_id, nume, varsta, descriere)
+        values(p_artist_id, p_nume, p_varsta, p_descriere);
+        
+        
+        --folosim variabila v_artist_info si functia ObtineInfoArtist pentru a afisa ce s-a inserat
+        v_artist_info := pachet_muzica_14.ObtineInfoArtist(p_artist_id);
+        dbms_output.put_line('S-au inserat urmatoarele informatii in tabela artist: ');
+        dbms_output.put_line('Id: ' || v_artist_info.artist_id);
+        dbms_output.put_line('Nume: ' || v_artist_info.nume);
+        dbms_output.put_line('Varsta: ' || v_artist_info.varsta);
+        dbms_output.put_line('Descriere: ' || v_artist_info.descriere);
+        dbms_output.new_line;
+        
+        
+    end CreareArtist;
+    
+    
+    procedure CreareAlbum(
+        p_album_id album.album_id%Type,
+        p_gen album.gen%type,
+        p_pret album.pret%Type,
+        p_data_lansare album.data_lansare%Type,
+        p_artist_id album.artist_id%type,
+        p_titlu album.titlu%type
+    ) is
+        v_album_info pachet_muzica_14.TipAlbum; --variabila pt apel functie ObtineInfoAlbum
+    begin
+    
+        --verificari integritate date
+        if p_album_id <=0 then
+            dbms_output.put_line('Atentie: ID-ul trebuie sa fie pozitiv!');
+            return; --iesim
+        end if;
+        
+        if p_gen is null or trim(p_gen)='' then
+            dbms_output.put_line('Atentie: Genul albumului nu poate fi null sau gol!');
+            return;
+        end if;
+        
+        if p_pret<0 or p_pret>10000000000 then
+            dbms_output.put_line('Atentie: Limitele pretului au fost depasite!');
+            return;
+        end if;
+        
+        if p_data_lansare is null then
+            dbms_output.put_line('Atentie: Data lansarii nu poate fi null!');
+            return;
+        end if;
+        
+        if p_artist_id is null or p_artist_id <=0 then
+            dbms_output.put_line('Atentie: Artist ID nu poate fi null sau valoare negativa!');
+            return;
+        end if;
+        
+        if p_titlu is null or trim(p_titlu)='' then
+            dbms_output.put_line('Atentie: Titlul nu poate fi null sau gol!');
+            return;
+        end if;
+        
+        
+        insert into album(album_id, gen, pret, data_lansare, artist_id, titlu)
+        values(p_album_id, p_gen, p_pret, p_data_lansare,p_artist_id, p_titlu);
+    
+        --folosim functia din paceht ObtineInfoAlbum pentru afisarea informatiilor tocmai inserate
+        v_album_info := pachet_muzica_14.ObtineInfoAlbum(p_album_id);
+        
+        dbms_output.put_line('S-au inserat in tabela album urmatoarele informatii: ');
+        dbms_output.put_line('Album ID: ' || v_album_info.album_id);
+        dbms_output.put_line('Gen: ' || v_album_info.gen);
+        dbms_output.put_line('Pret: ' || v_album_info.pret);
+        dbms_output.put_line('Data lansare: ' || v_album_info.data_lansare);
+        dbms_output.put_line('Artist ID: '||v_album_info.artist_id);
+        dbms_output.put_line('Titlu: ' || v_album_info.titlu);
+        dbms_output.new_line;
+    end CreareAlbum;
+    
+    procedure CrearePlaylist(
+        p_playlist_id playlist.playlist_id%Type,
+        p_titlu playlist.titlu%type,
+        p_data_creare playlist.data_creare%type
+    )is
+        v_playlist_info pachet_muzica_14.TipPlaylist;
+    begin
+    
+    --verificari integritate date
+    if p_playlist_id is null or p_playlist_id <=0 then
+        dbms_output.put_line('Atentie: Id-ul playlistului nu poate fi null sau valoare negativa!');
+        return;
+    end if;
+    
+    if p_titlu is null or trim(p_titlu)='' then
+        dbms_output.put_line('Atentie: Titlul nu poate fi null sau gol!');
+        return;
+    end if;
+    
+    if p_data_creare is null then
+        dbms_output.put_line('Atentie: Data crearii playlistului nu poate fi null!');
+        return;
+    end if;
+    
+    
+        insert into playlist(playlist_id, titlu, data_creare)
+        values(p_playlist_id, p_titlu, p_data_Creare);
+        
+    --apelare functie ObtineInfoPlaylist
+    v_playlist_info := pachet_muzica_14.ObtineInfoPlaylist(p_playlist_id);
+    
+    dbms_output.put_line('S-au introdus in tabela melodie urmatoarele informatii: ');
+    dbms_output.put_line('Playlist id: ' || v_playlist_info.playlist_id);
+    dbms_output.put_line('Titlu: ' || v_playlist_info.titlu);
+    dbms_output.put_line('Data creare: ' || v_playlist_info.titlu);
+    dbms_output.new_line;
+    end CrearePlaylist;
+    
+    procedure CreareMelodie(
+        p_melodie_id melodie.melodie_id%type,
+        p_titlu melodie.titlu%type,
+        p_descriere melodie.descriere%Type,
+        p_durata melodie.durata%Type,
+        p_data_lansare melodie.data_lansare%Type,
+        p_album_id melodie.album_id%type,
+        p_artist_id melodie.artist_id%Type
+    )is
+        v_melodie_info pachet_muzica_14.TipMelodie;
+    begin 
+    
+        --verificare integritate date 
+        if p_melodie_id is null or p_melodie_id <= 0 then
+            dbms_output.put_line('Atentie: Id-ul melodiei nu poate fi null sau valoare negativa!');
+            return;
+        end if;
+        
+        if p_titlu is null or trim(p_titlu)='' then
+            dbms_output.put_line('Atentie: Titlul melodiei nu poate fi null sau gol!');
+            return;
+        end if;
+        
+        --descrierea poate fi null
+        if p_durata is null or p_durata>=1000 then
+            dbms_output.put_line('Atentie: Limitele duratei depasite!');
+            return;
+        end if;
+        
+        if p_data_lansare is null then
+            dbms_output.put_line('Atentie: Data lansarii melodiei nu poate fi null!');
+            return;
+        end if;
+        
+        --album id si artist id poate fi null
+        
+        --daca trece verificarile, inseram
+        insert into melodie(melodie_id, titlu, descriere, durata, data_lansare, album_id, artist_id)
+        values(p_melodie_id, p_titlu, p_descriere, p_durata, p_data_lansare, p_album_id, p_artist_id);
+   
+        v_melodie_info := pachet_muzica_14.ObtineInfoMelodie(p_melodie_id);
+        
+        dbms_output.put_line('S-au introdus in tabela melodie urmatoarele informatii: ');
+        dbms_output.put_line('Melodie ID: ' ||v_melodie_info.melodie_id);
+        dbms_output.put_line('Titlu: ' || v_melodie_info.titlu);
+        dbms_output.put_line('Descriere: ' || v_melodie_info.descriere);
+        dbms_output.put_line('Durata: ' || v_melodie_info.durata);
+        dbms_output.put_line('Data lansare: ' || v_melodie_info.data_lansare);
+        dbms_output.put_line('Album ID: ' || v_melodie_info.album_id);
+        dbms_output.put_line('Artist ID: ' || v_melodie_info.artist_id);
+        dbms_output.new_line;
+        
+    end CreareMelodie;
+    
+    
+     procedure CreareUtilizator(
+        p_utilizator_id utilizator.utilizator_id%Type,
+        p_nume_utilizator utilizator.nume_utilizator%Type,
+        p_parola utilizator.parola%Type,
+        p_email utilizator.email%type, 
+        p_data_nastere utilizator.data_nastere%Type,
+        p_tara utilizator.tara%Type
+    )is
+        v_utilizator_info pachet_muzica_14.TipUtilizator;
+    begin
+    
+    --verificare integritate date
+    
+    if p_utilizator_id is null or p_utilizator_id <=0 then
+        dbms_output.put_line('Atentie: Id-ul utilizatorului nu poate fi null sau valoare negativa!');
+        return;
+    end if;
+    
+    if p_parola is null or trim(p_parola) = '' then
+        dbms_output.put_line('Atentie: Parola nu poate fi null sau goala!');
+        return;
+    end if;
+    
+    if p_data_nastere is null then
+        dbms_output.put_line('Atentie: Data nasterii nu poate fi null!');
+        return;
+    end if;
+    
+    if p_tara is null then
+        dbms_output.put_line('Atentie: Tara utilizatorului nu poate fi null!');
+        return;
+    end if;
+    
+    
+        insert into utilizator(utilizator_id, nume_utilizator, parola, email, data_nastere, tara)
+        values(p_utilizator_id, p_nume_utilizator, p_parola, p_email, p_data_nastere, p_tara);
+    
+    
+        --apelare ObtineInfoUtilizator
+        v_utilizator_info := pachet_muzica_14.ObtineInfoUtilizator(p_utilizator_id);
+        
+        dbms_output.put_line('S-au introdus in tabela utilizator urmatoarele informatii: ');
+        dbms_output.put_line('Utilizator ID: ' || v_utilizator_info.utilizator_id);
+        dbms_output.put_line('Nume utilizator: ' ||v_utilizator_info.nume_utilizator);
+        dbms_output.put_line('Parola: ' ||v_utilizator_info.parola);
+        dbms_output.put_line('Email: ' || v_utilizator_info.email);
+        dbms_output.put_line('Data nasterii: ' || v_utilizator_info.data_nastere);
+        dbms_output.put_line('Tara: ' ||v_utilizator_info.tara);
+        dbms_output.new_line;
+        end CreareUtilizator;
+    
+    
+end pachet_muzica_14;
+/
+
+
+
+--bloc apelare proceduri care vor apela functiile dupa inserare pentru afisarea
+--informatiilor care tocmai au fost inserate
+--declaram variabile de input pt fiecare procedura
+declare
+    artist_id_input artist.artist_id%type;
+    album_id_input album.album_id%type;
+    playlist_id_input playlist.playlist_id%type;
+    melodie_id_input melodie.melodie_id%type;
+    utilizator_id_input utilizator.utilizator_id%type;
+
+begin
+
+    select max(artist_id) + 1 into artist_id_input from artist;   
+    select max(album_id) + 1 into album_id_input from album;
+    select max(playlist_id) + 1 into playlist_id_input from playlist;
+    select max(melodie_id) + 1 into melodie_id_input from melodie;
+    select max(utilizator_id) + 1 into utilizator_id_input from utilizator;
+    
+    --punem in fiecare variabila de input id-ul cu 1 in plus fata de ultimul existent
+    --in tabel deja, pentru o fluiditate a datelor intr un mod natural
+    --apelam fiecare procedura cu aceste variabile
+    pachet_muzica_14.CreareArtist(artist_id_input, 'Artist Nume', 25, 'Descriere');
+    dbms_output.put_line('-----------------------------------------------------');
+    
+    pachet_muzica_14.CreareAlbum(album_id_input, 'Gen', 20.0, SYSDATE, artist_id_input, 'Album Titlu');
+    dbms_output.put_line('-----------------------------------------------------');
+    
+    pachet_muzica_14.CrearePlaylist(playlist_id_input, 'Playlist Titlu', SYSDATE);
+    dbms_output.put_line('-----------------------------------------------------');
+    
+    pachet_muzica_14.CreareMelodie(melodie_id_input, 'Titlu Mel', 'Descriere', 180, SYSDATE, album_id_input, artist_id_input);
+    dbms_output.put_line('-----------------------------------------------------');
+    
+    pachet_muzica_14.CreareUtilizator(utilizator_id_input, 'UserName', 'Password', 'user@email.com', SYSDATE, 'AB');
+    dbms_output.put_line('-----------------------------------------------------');
+    
+    
+    --Mesaj de incheiere a operatiilor cu succes
+    dbms_output.put_line('Proceduri apelate cu succes.');
+    
+exception
+    when others then
+         dbms_output.put_line('S-a produs o eroare: ' || SQLERRM);
+end;
+/
+
