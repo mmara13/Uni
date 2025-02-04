@@ -1,0 +1,19 @@
+﻿  C:freeglut.dll
+  C:glew32.dll
+  C:glew32s.dll
+  3 File(s) copied
+  C:glfw3.dll
+  C:glfw3dll.dll
+  C:glfw3_mt.dll
+  3 File(s) copied
+  C:SOIL.dll
+  1 File(s) copied
+  ex4.cpp
+C:\Users\maras\source\repos\lab3 grafica\ex4.cpp(51,34): warning C4305: 'initializing': truncation from 'double' to 'float'
+C:\Users\maras\source\repos\lab3 grafica\ex4.cpp(51,46): warning C4305: 'initializing': truncation from 'double' to 'float'
+C:\Users\maras\source\repos\lab3 grafica\ex4.cpp(250,31): warning C4244: 'argument': conversion from 'GLfloat' to 'int', possible loss of data
+C:\Users\maras\source\repos\lab3 grafica\ex4.cpp(250,21): warning C4244: 'argument': conversion from 'GLfloat' to 'int', possible loss of data
+  lab3 grafica.vcxproj -> C:\Users\maras\source\repos\lab3 grafica\x64\Debug\lab3 grafica.exe
+  0 File(s) copied
+  0 File(s) copied
+  0 File(s) copied
