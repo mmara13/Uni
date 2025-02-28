@@ -1,6 +1,6 @@
 # LAB 1 SSI
 
-# Cerințele pentru acest laborator: [Cerinte Lab 1](./cerinte_lab1.pdf)
+# Cerințele pentru acest laborator: [Cerinte Lab 1](./SSI_L1.pdf)
 
 ## 1. Potrivire răspunsuri
 
