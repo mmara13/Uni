@@ -116,7 +116,9 @@ LOMEKJO KHRHGEN FANGAOJ. I.KAQMWG EWK E.FEGGEQEW FOVQGMFMAQNJ
 ---
 
 ## 4. Enigma
-### 4.1 Configurația folosită (cheia zilei 1 mai 1941)
+### 4.1 Configurația folosită (cheia zilei 1 mai 1941: https://operationturing.tumblr.com/image/143702293214)
+
+![Configuration used](./1may1941.jpg)
 - **Rotoare:** V I IV
 - **Ring Settings:** P L Y (16 12 25)
 - **Plugboard:** AU BY CH DQ EF IO JN KL MR PW
