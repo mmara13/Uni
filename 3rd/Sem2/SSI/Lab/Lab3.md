@@ -122,6 +122,8 @@ LOMEKJO KHRHGEN FANGAOJ. I.KAQMWG EWK E.FEGGEQEW FOVQGMFMAQNJ
 - **Plugboard:** AU BY CH DQ EF IO JN KL MR PW
 - **Poziția inițială:** WZA
 
+![Configuration of machine](./ss1_l3.jpeg) 
+![](./ss2_l3.jpeg) 
 ### 4.2 Criptare
 - **Text inițial:** `MARAANDREEA`
 - **Rezultat criptare:** `ENQFN FIGIH L`
