@@ -15,10 +15,10 @@
 
 **Candidate 2**:
 
-- Funcția este prea simplă și previzibilă (adăugarea a jumătate din valoarea curentă)
-- Creează un pattern de creștere liniară în loc de ceva pseudo-aleator
+- Folosește doar o operație simplă de deplasare la dreapta cu 2 biți care nu oferă aleatoritate
+- Deși este într-un loop, seed-ul rămâne constant, deci generează mereu aceeași valoare repetată
 - Are proprietăți statistice slabe pentru a fi aleator
-- Secvența va crește rapid peste limite sau va converge
+- Produce aceeași valoare deterministic la fiecare iterație
 
 **Candidate 3**:
 
