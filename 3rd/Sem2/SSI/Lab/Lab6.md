@@ -4,7 +4,7 @@
 
 ### 1. Noțiuni introductive
 
-**De ce următoarele secvențe de cod nu definesc un PRNG?**
+**De ce secventele de cod nu definesc un PRNG?**
 
 **Candidate 1**:
 
