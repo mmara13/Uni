@@ -10,8 +10,6 @@
 
 - Folosește o operație simplă de putere (seed*seed) care creează pattern-uri previzibile
 - Va duce rapid la overflow sau va converge la 0 pentru multe valori inițiale
-- Secvența nu are o distribuție uniformă
-- Perioada este foarte scurtă înainte de a se repeta sau de a ajunge la valori degenerate
 
 **Candidate 2**:
 
