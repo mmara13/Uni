@@ -8,8 +8,7 @@
 
 **Candidate 1**:
 
-- Folosește o operație simplă de putere (seed*seed) care creează pattern-uri previzibile
-- Va duce rapid la overflow sau va converge la 0 pentru multe valori inițiale
+- Folosește o operație simplă de putere (seed XOR seed) genereaza mereu 0
 
 **Candidate 2**:
 
