@@ -1,5 +1,7 @@
 # Laborator - Funcții Hash și Stocarea Parolelor
 
+# Cerințele pentru acest laborator: [Cerinte Lab 7](./SSI_L7.pdf)
+
 ## 1. Noțiuni introductive - Răspunsuri adevărat/fals
 
 a) Amestecarea ingredientelor pentru realizarea unei prăjituri poate fi considerată one-way function.
