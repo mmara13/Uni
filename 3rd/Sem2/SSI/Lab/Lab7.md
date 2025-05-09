@@ -20,7 +20,7 @@ e) Este corect să afirmăm că „o funcție hash criptează".
 **Fals** - Funcțiile hash nu criptează informația, ci o transformă într-o amprentă digitală de dimensiune fixă. Criptarea presupune o chei și posibilitatea de decriptare.
 
 f) O funcție hash folosită pentru stocarea parolelor trebuie să fie rapidă (i.e., să se calculeze rapid H(x) pentru x dat).
-**Fals** - Funcțiile hash folosite pentru parole ar trebui să fie deliberat lente pentru a face atacurile prin forță brută mai dificile.
+**Fals** - Funcțiile hash folosite pentru parole ar trebui să fie intenționat lente pentru a face atacurile prin forță brută mai dificile.
 
 g) Hash-ul (fără salt) - 095b2626c9b6bad0eb89019ea6091bd9 – corespunde unei parole sigure, care nu ar fi susceptibilă spre exemplu la un atac de tip dicționar.
 **Fals** - Acest hash MD5 corespunde parolei "password", care este una dintre cele mai comune și slabe parole. Un atac de tip dicționar ar găsi-o imediat.
@@ -29,11 +29,11 @@ g) Hash-ul (fără salt) - 095b2626c9b6bad0eb89019ea6091bd9 – corespunde unei 
 
 ## Etape de rezolvare
 
-Am urmat pașii aceștia pentru a analiza securitatea funcției hash PHOTON-80/20/16 și a verifica posibilitatea găsirii coliziunilor:
+Pași pentru analiza și verificare coliziuni:
 
 ### 1. Compilarea implementării
 
-Am compilat implementarea PHOTON-80 folosind optimizarea bazată pe tabele, conform cerințelor din laborator:
+Am compilat implementarea PHOTON-80 conform cerințelor din laborator:
 
 ```bash
 gcc -D_PHOTON80_ -D_TABLE_ photon.c photondriver.c -o photon80 sha2.c timer.c helper.c -O3
@@ -80,7 +80,7 @@ def read_hashes(filename):
     hashes = {}
     with open(filename, 'r') as f:
         lines = f.readlines()
-        # Sărim prima linie (header)
+        # sarim prima linie (header)
         for line in lines[1:]:
             parts = line.strip().split(' ::::: ')
             if len(parts) == 2:
@@ -98,14 +98,14 @@ def read_hashes(filename):
 # Verifica coliziunile in output.txt
 collision, hash_val, input1, input2, count = read_hashes('output.txt')
 if not collision:
-    print(f"Nu au fost găsite coliziuni în cele {count} valori hash")
+    print(f"Nu au fost gasite coliziuni în cele {count} valori hash")
 
 # Verifica daca exista coliziuni fata de valorile din output_test.txt
 print("\nVerificam coliziuni cu valorile din output_test.txt...")
 test_hashes = {}
 with open('output_test.txt', 'r') as f:
     lines = f.readlines()
-    # Sărim prima linie (header)
+    # sarim prima linie (header)
     for line in lines[1:]:
         parts = line.strip().split(' ::::: ')
         if len(parts) == 2:
@@ -113,7 +113,7 @@ with open('output_test.txt', 'r') as f:
             hash_val = parts[1]
             test_hashes[hash_val] = input_val
 
-# acum verificam daca vreun hash din output.txt exista si în output_test.txt
+# acum verificam daca vreun hash din output.txt exista si in output_test.txt
 collision_count = 0
 with open('output.txt', 'r') as f:
     lines = f.readlines()
