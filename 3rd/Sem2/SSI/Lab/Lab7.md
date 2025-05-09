@@ -27,63 +27,147 @@ g) Hash-ul (fără salt) - 095b2626c9b6bad0eb89019ea6091bd9 – corespunde unei 
 
 ## 2. Securitatea funcției hash PHOTON-80/20/16
 
+## Etape de rezolvare
+
+Am urmat pașii aceștia pentru a analiza securitatea funcției hash PHOTON-80/20/16 și a verifica posibilitatea găsirii coliziunilor:
+
+### 1. Compilarea implementării
+
+Am compilat implementarea PHOTON-80 folosind optimizarea bazată pe tabele, conform cerințelor din laborator:
+
+```bash
+gcc -D_PHOTON80_ -D_TABLE_ photon.c photondriver.c -o photon80 sha2.c timer.c helper.c -O3
+```
+
+### 2. Testarea vitezei de execuție
+
+Am executat programul cu opțiunea `-s` pentru a măsura performanța funcției hash:
+
+```bash
+./photon80 -s
+```
+
+Rezultatul arată o viteză de aproximativ 323 de cicluri per byte, ceea ce indică o implementare eficientă a funcției hash. 
+
+### 3. Generarea datelor de intrare
+
+Pentru a testa rezistența la coliziuni, am creat un script Python pentru a genera aproximativ 10 milioane de valori de intrare distincte:
+
+```python
+with open('input.txt', 'w') as f:
+    # Generăm 10 milioane de intrări unice de forma "photon" + contor
+    for i in range(10000000):
+        f.write(f"photon{i}\n")
+```
+
+### 4. Calculul valorilor hash
+
+Am executat programul cu opțiunea `-f` pentru a calcula valorile hash pentru toate valorile de intrare generate:
+
+```bash
+./photon80 -f
+```
+
+Procesul a creat fișierul `output.txt` care conține pentru fiecare linie de intrare valoarea sa hash corespunzătoare.
+
+### 5. Verificarea coliziunilor
+
+Am implementat un script Python pentru a verifica dacă există coliziuni între hash-urile calculate:
+
+```python
+#fctie pentru a citi hash-urile din fisier
+def read_hashes(filename):
+    hashes = {}
+    with open(filename, 'r') as f:
+        lines = f.readlines()
+        # Sărim prima linie (header)
+        for line in lines[1:]:
+            parts = line.strip().split(' ::::: ')
+            if len(parts) == 2:
+                input_val = parts[0]
+                hash_val = parts[1]
+                if hash_val in hashes:
+                    print(f"COLIZIUNE GASITA!")
+                    print(f"Input 1: {hashes[hash_val]}")
+                    print(f"Input 2: {input_val}")
+                    print(f"Valoare hash: {hash_val}")
+                    return True, hash_val, hashes[hash_val], input_val
+                hashes[hash_val] = input_val
+    return False, None, None, None, len(hashes)
+
+# Verifica coliziunile in output.txt
+collision, hash_val, input1, input2, count = read_hashes('output.txt')
+if not collision:
+    print(f"Nu au fost găsite coliziuni în cele {count} valori hash")
+
+# Verifica daca exista coliziuni fata de valorile din output_test.txt
+print("\nVerificam coliziuni cu valorile din output_test.txt...")
+test_hashes = {}
+with open('output_test.txt', 'r') as f:
+    lines = f.readlines()
+    # Sărim prima linie (header)
+    for line in lines[1:]:
+        parts = line.strip().split(' ::::: ')
+        if len(parts) == 2:
+            input_val = parts[0]
+            hash_val = parts[1]
+            test_hashes[hash_val] = input_val
+
+# acum verificam daca vreun hash din output.txt exista si în output_test.txt
+collision_count = 0
+with open('output.txt', 'r') as f:
+    lines = f.readlines()
+    # sarim prima linie (header)
+    for line in lines[1:]:
+        parts = line.strip().split(' ::::: ')
+        if len(parts) == 2:
+            input_val = parts[0]
+            hash_val = parts[1]
+            if hash_val in test_hashes:
+                collision_count += 1
+                print(f"COLIZIUNE cu testul!")
+                print(f"Input nostru: {input_val}")
+                print(f"Input test: {test_hashes[hash_val]}")
+                print(f"Valoare hash: {hash_val}")
+
+if collision_count == 0:
+    print("Nu au fost gasite coliziuni cu valorile de test")
+```
+
+## Rezultate și analiză
+
+### Rezultatele obținute
+
+După verificarea celor 10 milioane de valori hash generate, **nu am găsit nicio coliziune**. De asemenea, nu am găsit coliziuni între valorile noastre și cele din fișierul `output_test.txt`.
+
 ### Analiza matematică a probabilității de coliziune pentru PHOTON-80
 
 **Date inițiale:**
+
 - PHOTON-80 generează un hash de 80 de biți
-- Spațiul posibil de valori este de 2^80 ≈ 1.2 × 10^24
-- Generate aproximativ 10 milioane (10^7) de valori
+- Spațiul posibil de valori este de 2^80 (aproximativ 1.2 × 10^24)
+- Am generat aproximativ 10 milioane (10^7) de valori
 
-**Principiul zilei de naștere:**
-Acest principiu ne ajută să calculăm probabilitatea de coliziune când selectăm aleatoriu valori dintr-un set. Pentru o funcție hash ideală, probabilitatea de a găsi o coliziune după generarea a k valori este aproximativ:
+Probabilitatea de coliziune:
+Conform **principiului zilei de naștere**, probabilitatea de a găsi o coliziune între 10^7 valori într-un spațiu de 2^80 este extrem de mică, aproximativ 4.1 × 10^-11 (sau 0.000000000041%). Această probabilitate este practic neglijabilă.
 
-P(coliziune) ≈ 1 - e^(-k²/(2n))
+**Numărul de valori necesare pentru o coliziune:**
+Pentru a avea o **șansă de 50% de a găsi o coliziune** pentru o funcție hash de 80 de biți, ar trebui să generăm aproximativ 2^40 (circa 1 trilion) de valori diferite. Acest număr este de aproximativ 100.000 de ori mai mare decât cele 10 milioane de valori pe care le-am generat.
+Deci, era de așteptat să nu găsim nicio coliziune, deoarece am testat doar o fracțiune foarte mică din numărul de valori necesare.
 
-Unde:
-- k = numărul de valori generate
-- n = dimensiunea spațiului de valori posibile (2^80 în cazul nostru)
+## Concluzie
 
-**Calculul:**
-Pentru k = 10^7 și n = 2^80:
-
-P(coliziune) ≈ 1 - e^(-(10^7)²/(2×2^80))
-P(coliziune) ≈ 1 - e^(-(10^14)/(2×2^80))
-
-Conversia în aceeași bază:
-2^80 ≈ 1.2 × 10^24
-10^14 ≈ 2^46.5
-
-P(coliziune) ≈ 1 - e^(-(2^46.5)/(2×2^80))
-P(coliziune) ≈ 1 - e^(-(2^46.5)/(2^81))
-P(coliziune) ≈ 1 - e^(-2^(46.5-81))
-P(coliziune) ≈ 1 - e^(-2^(-34.5))
-
-Deoarece 2^(-34.5) este extrem de mic:
-P(coliziune) ≈ 1 - (1 - 2^(-34.5)) = 2^(-34.5) ≈ 4.13 × 10^(-11)
-
-**Interpretare:**
-Probabilitatea de a găsi o coliziune după generarea a 10 milioane de valori este aproximativ 4.13 × 10^(-11), sau 0.0000000000413. Foarte mică, deci nu ar trebui să existe coliziuni.
-
-**Pentru a avea o șansă de 50% de a găsi o coliziune:**
-Conform principiului zilei de naștere, ar trebui să generăm aproximativ √(n × ln(2)) valori.
-
-Pentru n = 2^80: √(2^80 × ln(2)) ≈ √(2^80 × 0.693) ≈ 0.833 × 2^40 ≈ 9.2 × 10^11
-
-Deci, pentru a avea o probabilitate de 50% de a găsi o coliziune, ar trebui să generăm aproximativ 2^40 ≈ 1.1 × 10^12 valori, care este cu mai multe ordine de magnitudine mai mare decât cele 10 milioane generate.
-
-**Intuitiv:**
-Spațiul de hash (2^80) este de aproximativ 10^10 ori mai mare decât pătratul numărului de valori generate (10^14), ceea ce face ca probabilitatea de coliziune să fie extrem de mică. Deci, la volumul acesta de date este de așteptat să nu existe coliziuni.
-
-### Concluzie pentru întrebarea: "Ați reușit să găsiți o coliziune? Vă așteptați la acest rezultat? De ce/de ce nu?"
-
-Nu, nu am reușit să găsesc o coliziune în cele aproximativ 10.000.000 de valori generate. Acest rezultat era de așteptat din următoarele motive:
+Nu am reușit să găsesc nicio coliziune în cele aproximativ 10.000.000 de valori generate. Acest rezultat era de așteptat din următoarele motive:
 
 1. Spațiul de hash pentru PHOTON-80 este de 2^80 (aproximativ 1.2 × 10^24) valori posibile
 2. Pentru a avea o șansă de 50% de a găsi o coliziune (conform teoremei zilei de naștere), am avea nevoie de aproximativ 2^40 (aproximativ 1.1 × 10^12) valori
 3. 10.000.000 de valori reprezintă doar o fracțiune minusculă din 2^40, astfel încât probabilitatea de a găsi o coliziune este extrem de mică (~4.1 × 10^-11)
 4. Spațiul de hash (2^80) este de aproximativ 10^10 ori mai mare decât pătratul numărului de valori generate (10^14)
 
-Pentru a găsi o coliziune, ar trebui să generăm multe ordine de magnitudine mai multe valori și să folosim algoritmi eficienți de detectare a coliziunilor, ceea ce ar necesita resurse computaționale semnificativ mai mari.
+Pentru a găsi o coliziune, ar trebui să generăm mai multe valori și să folosim algoritmi eficienți de detectare a coliziunilor, ceea ce ar necesita resurse computaționale semnificativ mai mari.
+
+Această analiză demonstrează că funcția hash PHOTON-80, cu un output de 80 de biți, oferă o rezistență bună la coliziuni pentru volumul de date testate, în concordanță cu principiile teoretice ale securității funcțiilor hash.
+
 
 ## 3. Stocarea parolelor
 
