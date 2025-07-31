@@ -1,0 +1,52 @@
+Undecidability:
+	1. Ce este nedecidabilitatea:
+		a. Probleme nerezolvabile computational
+		b. Halting Problem(A_TM e nedecidabila)
+		c. Modelul universal de TM propus de Alan Turing in 1936(U - input <M, w> -> simulam M pe inputul w, daca intra in stare de accept - acceptam, daca intra in stare de reject, rejectam)
+	2. Metoda diagonalizarii + multimi numarabile/nenumarabile(ℚ, ℝ):
+		a. Georg Cantor - dimensiunea multimilor infinite - 1871 - compararea dimensiunilor prin punerea in asociere a elementelor multimii, nu prin numarare
+		b. Exemplul dintre ℕ si multimea numerelor pare -> f(n) = 2n -> au aceeasi dimensiune
+		c. Definitie multime numarabila
+		d. ℚ in raport cu ℕ -> ℚ e numarabila(desen matrice Vladoiu)
+		e. ℝ in raport cu ℕ -> ℝ nu e numarabila(constructia numarului cu a n-a zecimala diferita de a n-a zecimala a numarului f(n))
+	3. Limbaje non Turing-recognizable:
+		a. Teorema - unele limbaje nu sunt Turing-recognizable
+		b. Multimea TMs este numarabila -> multimea tuturor string-urilor Σ* e numarabila peste alfabetul Σ(nr finit de string-uri de lungime 0, 1, 2, etc) -> fiecare TM are encodare in string -> multimea TMs ⊆ Σ*
+		c. Multimea limbajelor L peste alfabetul Σ e nenumarabila -> multimea secventelor binare B infinite e nenumarabila(dem. asemanatoare cu cea de la ℝ) -> asociem prin functia f:L->B numita secventa caracteristica(A ∈ L cu secventa unica in B - Σ* = {s1,s2,s3} cu bitul i = 1 daca si ∈ A, 0 daca si ∉ A) -> exemplu cu A = string-urile care incep cu 0 peste alfabetul {0,1}
+	4. A_TM e nedecidabila:
+		a. Pp ca e decidabila si construim H(<M,w>) = accepta daca M accepta w, reject altfel
+		b. Construim D cu H ca subrutina. D(<M>) = rulez H pe <M,<M>> = accepta <M> daca M nu accepta <M>, reject <M> daca M accepta <M>
+		c. D(<D>) = accepta <D> daca D nu accepta <D>, reject <D> daca D accepta <D> -> ※
+		d. Diagonalizarea = matricea cu M1, M2, M3,... ca indice de linii si <M1>, <M2>, <M3>,... ca indice de coloane - accept sau reject in matrice - contradictia se intampla mai jos la celula corespunzatoare D, <D>
+
+
+
+NP-Completeness:
+	1. SAT formula:
+		a. Descrierea unei formule booleene
+		b. Prima problema demonstrata ca fiind NP-complete, descrierea multimii SAT = {<Φ> | Φ e o formula booleana satisfiabila}
+	2. Reductibilitatea in timp polinomial:
+		a. O functie f:Σ*->Σ* s.n. functia computabila in timp polinomial daca exista o TM polinomiala M care se opreste cu doar f(w) pe banda pornind de la inputul w
+		b. Limbajul A se reduce in timp polinomial la limbajul B daca exista f o functie computabila in timp polinomial pentru fiecare w ∈ A <=> f(w) ∈ B ---> f s.n. reducerea polinomiala a lui A la B
+		c. Reducerea problemei A in timp polinomial la B avand o solutie in timp polinomial pentru B -> solutie in timp polinomial pentru A
+		d. Daca A se reduce in timp polinomial la B si B ∈ P, atunci A ∈ P(N cu input w - calcuam f(w), rulam M pe f(w) si afisam raspunsul)
+	3. 3CNF-formula:
+		a. 3SAT definitie si structura - exact 3 literali legati intre ei prin ∨ formeaza o clauza. Fiecare clauza e legata de celelalte clauze prin ∧
+		b. A ∨ B ∨ C ∨ D ∨ E  <=>  (A ∨ B ∨ x1) ∧ (¬x1 ∨ C ∨ x2) ∧ (¬x2 ∨ D ∨ E)
+	4. NP-complete:
+		a. Probleme care stau la baza NP - de complexitatea lor depind complexitatile celorlalte probleme din NP
+		b. Importante teoretice = P ≠ NP(orice pb din NP ruleaza in timpm mai mult decat polinomial -> si o pb NP-complete ruleaza) si P = NP(un algoritm polinomial pt o problema NP-complete -> toate celelalte au rezolvari polinomiale)
+		c. Importante practice = nu ne mai pierdem timpul cu a cauta solutii polinomiale posibil inexistente, se crede totusi ca P ≠ NP desi nu putem demonstra momentan, daca o problema e NP-complete putem spune cu o oarecare siguranta ca probabil nu are rezolvare polinomiala
+		d. Un limbaj B e NP-complet daca B ∈ NP si orice A ∈ NP se reduce in timp polinomial la B
+		e. B e NP-complet si B ∈ P, atunci P = NP
+		f. B e NP-complet si B se reduce in timp polinomial la C, atunci C e NP-complet
+	5. Teorema Cook-Levin(SAT e NP-complete):
+		a. SAT e NP => o NTM poate ghici assignment-ul pentru Φ si sa accepte daca il satisface
+		b. Aratam ca orice limbaj A in NP se reduce in timp polinomial la SAT(avem NTM N ce decide A in n^k unde k e o constanta)
+		c. Tabloul de n^k x n^k care contine toate configuratiile unui branch al NTM N(desen)
+		d. Sa determinam ca N accepta w <=> sa determinam daca avem un tablou de accept al lui N pe w
+		e. Descrierea reductiei in timp polinomial f de la A la SAT => formula Φ(Q multimea de stari, Γ alfabetul => C = Q ∪ Γ ∪ {#} = ce putem gasi intr-o celula a tabloului)
+		f. Descriem formula Φ = Φcell ∧ Φstart ∧ Φmove ∧ Φaccept, iar apoi descriem fiecare bucata in parte(formula cell, cum arata start, formula accept, ferestre legale si cum functioneaza move)
+		g. Discutie complexitate. Avem l x n^2k variabile in total, dar cum l tine de TM N => O(n^2k) variabile. Φcell, Φmove si Φaccept contin un fragment fix pentru fiecare celula din tablou => O(n^2k), iar Φstart contine un fragment fix pentru fiecare celula din primul rand al tabloului => O(n^k)
+	6. 3SAT e NP-complete:
+		a. Convetim SAT in CNF dupa reguli aplicate fiecarei componente din Φ(daca in clauza avem 1/2 literali duplicam unul din ei pana avem 3, iar daca avem mai mult de 3 literali, spargem clauza in mai multe clauze folosind variabile de legatura ca sa pastram valoarea de adevar -  (a1 ∨ a2 ∨ a3 ∨ a4) = (a1 ∨ a2 ∨ z) ∧ (¬z ∨ a3 ∨ a4))

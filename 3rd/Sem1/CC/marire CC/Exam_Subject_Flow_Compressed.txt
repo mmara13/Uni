@@ -1,0 +1,13 @@
+Undecidability:
+	- Ce este undecidability?
+	- Metoda diagonalizarii + multimi numarabile(Q) si nenumarabile(R)
+	- Unele limbaje sunt non Turing recognizable
+	- A_TM este nedecidabila
+
+NP-complete:
+	- SAT formula(problema satisfiabilitatii unei formule booleene)
+	- Reductibilitatea in timp polinomial
+	- 3CNF formula(incluzand 3SAT --> CLIQUE)
+	- NP-complete
+	- Teorema Cook-Levin(SAT este NP-complete)
+	- 3SAT este NP-complete
