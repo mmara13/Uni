@@ -21,12 +21,6 @@ This repository contains all my coursework, projects, and materials from my bach
 └── 📄 README.md
 ```
 
-## 🎯 Academic Progress
-
-- **Year 1**: [Brief description - Foundation courses, GPA, highlights]
-- **Year 2**: [Brief description - Core subjects, major projects]
-- **Year 3**: [Brief description - Specialization, capstone projects]
-
 ## 🔍 Quick Navigation
 
 | Year | Semester 1 | Semester 2 |
