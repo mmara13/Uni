@@ -1,6 +1,6 @@
 # 🎓 University Repository
 
-This repository contains all my coursework, projects, and materials from my bachelor's studies, organized by academic year and semester.
+This repository contains all coursework, projects, and materials from my bachelor's studies.
 
 ## 📁 Repository Structure
 
